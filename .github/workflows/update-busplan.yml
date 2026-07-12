@@ -1,0 +1,41 @@
+name: Opdater busplan
+
+on:
+  schedule:
+    # Kører hver dag kl. 04:15 UTC.
+    # Det svarer ca. til 05:15/06:15 i Spanien afhængigt af vinter/sommer.
+    - cron: "15 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-busplan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Hent repository
+        uses: actions/checkout@v4
+
+      - name: Sæt Python op
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Lav busplan fra NAP/ALSA GTFS
+        env:
+          NAP_API_KEY: ${{ secrets.NAP_API_KEY }}
+        run: python scripts/update_busplan.py
+
+      - name: Commit ændringer hvis busplanen er opdateret
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add docs/busplan-villas-caravaning.json
+          if git diff --cached --quiet; then
+            echo "Ingen ændringer i busplanen."
+          else
+            git commit -m "Opdater busplan"
+            git push
+          fi
