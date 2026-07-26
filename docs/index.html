@@ -68,6 +68,12 @@ button:hover { background: #111827; }
 .catastro-value { font-weight: 700; overflow-wrap: anywhere; }
 .catastro-value a { color: #1f4ed8; text-decoration: none; }
 .catastro-value a:hover { text-decoration: underline; }
+.catastro-ref-button {
+  appearance: none; border: 0; background: transparent; color: #1f4ed8; padding: 0; min-height: 0;
+  font: inherit; font-weight: 800; text-align: left; cursor: pointer; text-decoration: underline;
+}
+.catastro-ref-button:hover { color: #1536a3; background: transparent; }
+.catastro-card.compact .catastro-note { display: none; }
 .catastro-note { margin: 12px 0 0; color: var(--muted); font-size: .82rem; line-height: 1.45; }
 @media (max-width: 620px) { .catastro-grid { grid-template-columns: 1fr; } .catastro-head { flex-direction: column; } }
 .map-card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(15,23,42,.07); }
@@ -3173,6 +3179,7 @@ const CATASTRO_COORDS_URL = 'https://ovc.catastro.meh.es/OVCServWeb/OVCWcfCallej
 const CATASTRO_DNPRC_URL = 'https://ovc.catastro.meh.es/OVCServWeb/OVCWcfCallejero/COVCCallejero.svc/json/Consulta_DNPRC';
 const catastroLookupCache = new Map();
 let catastroRequestToken = 0;
+let catastroExpandedParcelKey = '';
 
 const CATASTRO_TEXT = {
   da: {
@@ -4011,7 +4018,9 @@ window.vcHandleOrientationChange = function() {
 
 function hideCatastroInfo() {
   catastroRequestToken += 1;
-  if (catastroCard) catastroCard.classList.remove('visible');
+  catastroExpandedParcelKey = '';
+  if (catastroCard) catastroCard.classList.remove('visible', 'compact');
+  if (catastroNote) catastroNote.style.display = '';
 }
 
 function formatCatastroPercent(value, lang) {
@@ -4053,19 +4062,57 @@ function renderCatastroRows(rows, note, lang = uiLanguage, parcelKey = '') {
     catastroGrid.innerHTML = rows.filter(r => r && r.value !== undefined && r.value !== null && String(r.value).trim() !== '').map(r => `
       <div class="catastro-item"><div class="catastro-label">${escapeHtml(r.label)}</div><div class="catastro-value">${r.html ? r.value : escapeHtml(r.value)}</div></div>
     `).join('');
+    const toggleBtn = catastroGrid.querySelector('[data-catastro-toggle="1"]');
+    if (toggleBtn && parcelKey) toggleBtn.addEventListener('click', () => toggleCatastroInfo(parcelKey, uiLanguage));
   }
-  if (catastroNote) catastroNote.textContent = note || t.note;
+  if (catastroNote) {
+    const finalNote = note === '' ? '' : (note || t.note);
+    catastroNote.textContent = finalNote;
+    catastroNote.style.display = finalNote ? '' : 'none';
+  }
+  if (catastroCard) catastroCard.classList.remove('compact');
   if (catastroCard) catastroCard.classList.add('visible');
+}
+
+function renderCatastroReferenceOnly(data, lang = uiLanguage, parcelKey = '') {
+  const t = CATASTRO_TEXT[lang] || CATASTRO_TEXT.en;
+  const reference = data && data.reference ? String(data.reference).trim() : '';
+  if (!reference) {
+    renderCatastroRows(rowsFromCatastroData(data || {}, lang), t.note, lang, parcelKey);
+    return;
+  }
+  if (catastroTitle) catastroTitle.textContent = t.title;
+  if (catastroBadge) catastroBadge.textContent = t.badge(catastroDisplayParcelKey(parcelKey));
+  if (catastroGrid) {
+    catastroGrid.innerHTML = `
+      <div class="catastro-item">
+        <div class="catastro-label">${escapeHtml(t.labels.reference)}</div>
+        <div class="catastro-value"><button type="button" class="catastro-ref-button" data-catastro-toggle="1">${escapeHtml(reference)}</button></div>
+      </div>
+    `;
+    const btn = catastroGrid.querySelector('[data-catastro-toggle="1"]');
+    if (btn) btn.addEventListener('click', () => toggleCatastroInfo(parcelKey, uiLanguage));
+  }
+  if (catastroNote) {
+    catastroNote.textContent = '';
+    catastroNote.style.display = 'none';
+  }
+  if (catastroCard) catastroCard.classList.add('visible', 'compact');
+}
+
+function renderCatastroDataByMode(data, lang = uiLanguage, parcelKey = '') {
+  if (catastroExpandedParcelKey === parcelKey) {
+    renderCatastroRows(rowsFromCatastroData(data, lang), (CATASTRO_TEXT[lang] || CATASTRO_TEXT.en).note, lang, parcelKey);
+  } else {
+    renderCatastroReferenceOnly(data, lang, parcelKey);
+  }
 }
 
 function renderCatastroLoading(parcelKey, lang = uiLanguage) {
   const t = CATASTRO_TEXT[lang] || CATASTRO_TEXT.en;
-  const displayKey = catastroDisplayParcelKey(parcelKey);
-  const geo = getCatastroGeoForParcel(displayKey);
   const rows = [];
-  if (geo) rows.push({label:t.labels.coordinates, value:`${geo.lat.toFixed(6)}, ${geo.lng.toFixed(6)}`});
   rows.push({label:t.labels.reference, value:t.loading});
-  renderCatastroRows(rows, t.note, lang, parcelKey);
+  renderCatastroRows(rows, '', lang, parcelKey);
 }
 
 function findFirstObject(root, predicate) {
@@ -4172,7 +4219,12 @@ function parseCatastroDetail(data, reference, coords) {
 function rowsFromCatastroData(data, lang = uiLanguage) {
   const t = CATASTRO_TEXT[lang] || CATASTRO_TEXT.en;
   const rows = [];
-  rows.push({label:t.labels.reference, value:data.reference});
+  const reference = data && data.reference ? String(data.reference).trim() : '';
+  rows.push({
+    label:t.labels.reference,
+    value: reference ? `<button type="button" class="catastro-ref-button" data-catastro-toggle="1">${escapeHtml(reference)}</button>` : '',
+    html: Boolean(reference)
+  });
   rows.push({label:t.labels.propertyClass, value:translateCatastroClass(data.propertyClass, t)});
   rows.push({label:t.labels.mainUse, value:translateCatastroUse(data.mainUse, t)});
   rows.push({label:t.labels.builtAreaM2, value:data.builtAreaM2 ? `${cleanCatastroValue(data.builtAreaM2)} m²` : ''});
@@ -4235,11 +4287,11 @@ async function loadCatastroInfo(parcelKey, lang = uiLanguage) {
   const fallback = staticCatastroFallbackData(parcelKey, coords);
   const t0 = CATASTRO_TEXT[lang] || CATASTRO_TEXT.en;
 
-  // Den faste referencia catastral fra den tidligere, stabile funktion vises med det samme.
-  // Hvis Catastros offentlige opslag virker, opdateres boksen bagefter med flere oplysninger.
+  // Indledningsvis vises kun referencia catastral.
+  // Alle øvrige oplysninger vises først, når brugeren trykker på referenciaen.
   if (fallback) {
     catastroLookupCache.set(parcelKey, fallback);
-    renderCatastroRows(rowsFromCatastroData(fallback, lang), t0.note, lang, parcelKey);
+    renderCatastroDataByMode(fallback, lang, parcelKey);
   } else {
     renderCatastroLoading(parcelKey, lang);
   }
@@ -4252,23 +4304,49 @@ async function loadCatastroInfo(parcelKey, lang = uiLanguage) {
     const complete = {...(fallback || {}), ...detail, reference: detail.reference || reference, catastroUrl: catastroOfficialUrl(detail.reference || reference)};
     catastroLookupCache.set(parcelKey, complete);
     if (token !== catastroRequestToken) return;
-    renderCatastroRows(rowsFromCatastroData(complete, uiLanguage), (CATASTRO_TEXT[uiLanguage] || CATASTRO_TEXT.en).note, uiLanguage, parcelKey);
+    renderCatastroDataByMode(complete, uiLanguage, parcelKey);
   } catch (err) {
     if (fallback) return;
     const t = CATASTRO_TEXT[uiLanguage] || CATASTRO_TEXT.en;
     if (token !== catastroRequestToken) return;
     const rows = [];
-    if (coords) rows.push({label:t.labels.coordinates, value:`${coords.lat.toFixed(6)}, ${coords.lng.toFixed(6)}`});
     rows.push({label:t.labels.reference, value: err && err.message === 'NO_REFCAT' ? t.noReference : t.offline});
     renderCatastroRows(rows, t.note, uiLanguage, parcelKey);
   }
+}
+
+function toggleCatastroInfo(parcelKey, lang = uiLanguage) {
+  if (!parcelKey) return;
+  const cached = catastroLookupCache.get(parcelKey);
+
+  if (catastroExpandedParcelKey === parcelKey) {
+    catastroExpandedParcelKey = '';
+    if (cached) {
+      renderCatastroReferenceOnly(cached, lang, parcelKey);
+      return;
+    }
+    loadCatastroInfo(parcelKey, lang);
+    return;
+  }
+
+  catastroExpandedParcelKey = parcelKey;
+  if (cached) {
+    renderCatastroRows(rowsFromCatastroData(cached, lang), (CATASTRO_TEXT[lang] || CATASTRO_TEXT.en).note, lang, parcelKey);
+    return;
+  }
+  loadCatastroInfo(parcelKey, lang);
+}
+
+function expandCatastroInfo(parcelKey, lang = uiLanguage) {
+  if (!parcelKey) return;
+  if (catastroExpandedParcelKey !== parcelKey) toggleCatastroInfo(parcelKey, lang);
 }
 
 function showCatastroInfo(parcelKey, lang = uiLanguage) {
   if (!parcelKey) { hideCatastroInfo(); return; }
   const cached = catastroLookupCache.get(parcelKey);
   if (cached) {
-    renderCatastroRows(rowsFromCatastroData(cached, lang), (CATASTRO_TEXT[lang] || CATASTRO_TEXT.en).note, lang, parcelKey);
+    renderCatastroDataByMode(cached, lang, parcelKey);
     return;
   }
   loadCatastroInfo(parcelKey, lang);
@@ -4937,6 +5015,7 @@ function showParcel(sector, number, lang = activeLanguage, preserveState = false
 
   if (!preserveState) {
     currentResult = { type: 'parcel', sector, number };
+    catastroExpandedParcelKey = '';
   }
 
   const parcelKey = `${sector} ${number}`;
