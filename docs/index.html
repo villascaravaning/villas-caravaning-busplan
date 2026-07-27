@@ -646,6 +646,34 @@ body.landscape-mode.phone-mode.content-view .map-card {
   height: 100%;
 }
 
+/* Stabil visning af den eksterne Strand Status-side.
+   Den indlejrede side får sin egen rulning og påvirkes ikke af platformens CSS-zoom. */
+body.beach-native-view .beach-frame-viewport {
+  overflow: hidden !important;
+  overscroll-behavior: contain;
+}
+body.beach-native-view .beach-frame-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100% !important;
+  min-height: 100% !important;
+}
+body.beach-native-view .beach-status-frame {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  transform: none !important;
+  touch-action: pan-x pan-y;
+}
+body.beach-native-view .beach-zoom-controls {
+  display: none !important;
+}
+body.phone-mode.content-view .beach-status-footer {
+  max-height: 112px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 </style>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
@@ -709,7 +737,7 @@ body.landscape-mode.phone-mode.content-view .map-card {
         </div>
         <div id="beachFrameViewport" class="beach-frame-viewport">
           <div id="beachFrameCanvas" class="beach-frame-canvas">
-            <iframe id="beachStatusFrame" class="beach-status-frame" title="Strand Status" loading="lazy" data-src="https://www.cartagena.es/callejero/verMapaEstadoPlayas.asp"></iframe>
+            <iframe id="beachStatusFrame" class="beach-status-frame" title="Strand Status" loading="lazy" scrolling="yes" data-src="https://www.cartagena.es/callejero/verMapaEstadoPlayas.asp"></iframe>
           </div>
           <div id="beachZoomControls" class="beach-zoom-controls" aria-label="Zoom strandinformation">
             <button id="beachZoomOut" type="button" title="Zoom ud">−</button>
@@ -3830,11 +3858,8 @@ function applyInterfaceLanguage(lang, options = {}) {
     busPlanBtn.setAttribute('aria-label', bt.title);
   }
   updateBeachStatusUi();
-  if (activeBeachSource === 'find' && beachStatusFrame) {
-    const source = getBeachStatusSource('find');
-    if (activeLayer === 'beach' && beachStatusFrame.getAttribute('src') !== source.url) {
-      beachStatusFrame.setAttribute('src', source.url);
-    }
+  if (activeBeachSource === 'find' && beachStatusFrame && activeLayer === 'beach') {
+    setBeachFrameSource('find', true);
   }
   updateBusPlanLanguage();
   const cu = CALIBRATION_UI[uiLanguage] || CALIBRATION_UI.en;
@@ -3933,7 +3958,7 @@ const BEACH_DEFAULT_VIEWS = {
   // CSS-zoom/scroll positions in the official external map. The Cartagena page is cross-domain,
   // so we cannot call its internal map API directly. Derfor bruges nu kun en mild startzoom,
   // så kortet åbner længere ude og brugeren selv kan zoome ind.
-  cartagena: { zoom: 1.10, x: 0.50, y: 0.43 },
+  cartagena: { zoom: 1, x: 0, y: 0 },
   nayade: { zoom: 1, x: 0, y: 0 },
   find: { zoom: 1, x: 0, y: 0 }
 };
@@ -3942,6 +3967,7 @@ let activeLayer = 'site';
 let activeBeachSource = 'cartagena';
 let beachZoom = 1;
 let pendingBeachInitialView = false;
+let beachFrameRequestId = 0;
 let busPlanData = null;
 let selectedBusDate = null;
 let busPlanLoading = false;
@@ -4509,14 +4535,30 @@ function clampBeachZoom(value) {
 
 function applyBeachZoom() {
   if (!beachFrameViewport || !beachFrameCanvas || !beachStatusFrame) return;
+
+  // Cartagena-siden er en ekstern, responsiv side. Native iframe-visning forhindrer,
+  // at toppen eller bunden af dens indhold bliver beskåret efter en skærmændring.
+  if (activeBeachSource === 'cartagena') {
+    beachZoom = 1;
+    beachFrameCanvas.style.width = '100%';
+    beachFrameCanvas.style.height = '100%';
+    beachStatusFrame.style.width = '100%';
+    beachStatusFrame.style.height = '100%';
+    beachStatusFrame.style.transform = 'none';
+    if (beachZoomReset) beachZoomReset.textContent = '100%';
+    if (beachFocusVillas) beachFocusVillas.classList.add('hidden');
+    return;
+  }
+
   beachZoom = clampBeachZoom(beachZoom);
-  beachFrameCanvas.style.width = `${beachZoom * 100}%`;
-  beachFrameCanvas.style.height = `${beachZoom * 100}%`;
+  const canvasScale = Math.max(1, beachZoom);
+  beachFrameCanvas.style.width = `${canvasScale * 100}%`;
+  beachFrameCanvas.style.height = `${canvasScale * 100}%`;
   beachStatusFrame.style.width = `${100 / beachZoom}%`;
   beachStatusFrame.style.height = `${100 / beachZoom}%`;
   beachStatusFrame.style.transform = `scale(${beachZoom})`;
   if (beachZoomReset) beachZoomReset.textContent = `${Math.round(beachZoom * 100)}%`;
-  if (beachFocusVillas) beachFocusVillas.classList.toggle('hidden', activeBeachSource !== 'cartagena');
+  if (beachFocusVillas) beachFocusVillas.classList.add('hidden');
 }
 
 function setBeachZoom(value, keepCenter = true) {
@@ -4542,7 +4584,16 @@ function setBeachZoom(value, keepCenter = true) {
 }
 
 function focusBeachView(sourceKey = activeBeachSource) {
-  const view = BEACH_DEFAULT_VIEWS[sourceKey] || BEACH_DEFAULT_VIEWS.cartagena;
+  if (sourceKey === 'cartagena') {
+    beachZoom = 1;
+    applyBeachZoom();
+    requestAnimationFrame(() => {
+      if (beachFrameViewport) beachFrameViewport.scrollTo({ left: 0, top: 0, behavior: 'auto' });
+    });
+    return;
+  }
+
+  const view = BEACH_DEFAULT_VIEWS[sourceKey] || BEACH_DEFAULT_VIEWS.nayade;
   const phoneBoost = 0;
   beachZoom = clampBeachZoom((view.zoom || 1) + phoneBoost);
   applyBeachZoom();
@@ -4584,12 +4635,39 @@ function getBeachStatusSource(key = activeBeachSource) {
   return BEACH_STATUS_SOURCES[key] || BEACH_STATUS_SOURCES.cartagena;
 }
 
+function setBeachFrameSource(sourceKey = activeBeachSource, forceReload = false) {
+  if (!beachStatusFrame) return;
+  const source = getBeachStatusSource(sourceKey);
+  const currentCleanUrl = beachStatusFrame.dataset.cleanSrc || '';
+  const currentSrc = beachStatusFrame.getAttribute('src') || '';
+
+  if (!forceReload && currentCleanUrl === source.url && currentSrc && currentSrc !== 'about:blank') return;
+
+  const requestId = ++beachFrameRequestId;
+  beachStatusFrame.dataset.cleanSrc = source.url;
+  beachStatusFrame.dataset.sourceKey = sourceKey;
+
+  // En kort blank indlæsning nulstiller den eksterne sides egen scroll- og layouttilstand.
+  // Det er nødvendigt i Android WebView, når iframe-vinduet først bliver gjort større.
+  if (forceReload && currentSrc) {
+    beachStatusFrame.setAttribute('src', 'about:blank');
+    setTimeout(() => {
+      if (requestId !== beachFrameRequestId) return;
+      if (activeLayer !== 'beach' || activeBeachSource !== sourceKey) return;
+      beachStatusFrame.setAttribute('src', source.url);
+    }, 60);
+  } else {
+    beachStatusFrame.setAttribute('src', source.url);
+  }
+}
+
 function updateBeachStatusUi() {
   const t = getChrome(uiLanguage);
   const isCartagena = activeBeachSource === 'cartagena';
   const isNayade = activeBeachSource === 'nayade';
   const isFindBeach = activeBeachSource === 'find';
   const source = getBeachStatusSource();
+  document.body.classList.toggle('beach-native-view', activeLayer === 'beach' && isCartagena);
   if (beachStatusTabs) beachStatusTabs.setAttribute('aria-label', t.beachStatusTabsAria || 'Vælg strandinformation');
   if (beachCartagenaBtn) {
     beachCartagenaBtn.textContent = t.beachStatusCartagena || 'Strand Status';
@@ -4640,12 +4718,11 @@ function setBeachStatusSource(key) {
   if (activeBeachSource === 'find') {
     beachFindReloadNonce = Date.now();
   }
-  const source = getBeachStatusSource();
   updateBeachStatusUi();
-  if (beachStatusFrame && activeLayer === 'beach' && beachStatusFrame.getAttribute('src') !== source.url) {
-    beachStatusFrame.setAttribute('src', source.url);
+  if (activeLayer === 'beach') {
+    setBeachFrameSource(activeBeachSource, true);
+    scheduleBeachInitialView(activeBeachSource);
   }
-  if (activeLayer === 'beach') scheduleBeachInitialView(activeBeachSource);
 }
 
 
@@ -4861,6 +4938,7 @@ async function loadBusPlan(force = false) {
 }
 
 function setActiveLayer(layer, resetView = true) {
+  const previousLayer = activeLayer;
   activeLayer = layer === 'bus' ? 'bus' : (layer === 'beach' ? 'beach' : (layer === 'aerial' ? 'aerial' : 'site'));
   const aerial = activeLayer === 'aerial';
   const beach = activeLayer === 'beach';
@@ -4875,11 +4953,15 @@ function setActiveLayer(layer, resetView = true) {
   if (busPlanPane) busPlanPane.classList.toggle('visible', bus);
   if (bus) loadBusPlan(false);
   if (beach && beachStatusFrame) {
-    const source = getBeachStatusSource();
-    if (beachStatusFrame.getAttribute('src') !== source.url) {
-      beachStatusFrame.setAttribute('src', source.url);
-    }
-    scheduleBeachInitialView(activeBeachSource);
+    const enteringBeach = previousLayer !== 'beach';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setBeachFrameSource(activeBeachSource, enteringBeach);
+        scheduleBeachInitialView(activeBeachSource);
+      });
+    });
+  } else {
+    document.body.classList.remove('beach-native-view');
   }
   updateBeachStatusUi();
 
@@ -5278,9 +5360,19 @@ if (beachZoomIn) beachZoomIn.addEventListener('click', () => setBeachZoom(beachZ
 if (beachZoomReset) beachZoomReset.addEventListener('click', resetBeachView);
 if (beachFocusVillas) beachFocusVillas.addEventListener('click', () => focusBeachView('cartagena'));
 if (beachStatusFrame) beachStatusFrame.addEventListener('load', () => {
-  if (pendingBeachInitialView && activeLayer === 'beach') {
+  const loadedSrc = beachStatusFrame.getAttribute('src') || '';
+  if (loadedSrc === 'about:blank') return;
+  if (activeLayer === 'beach') {
     pendingBeachInitialView = false;
-    setTimeout(() => focusBeachView(activeBeachSource), 150);
+    setTimeout(() => {
+      focusBeachView(activeBeachSource);
+      // Et lille størrelses-nøk tvinger ældre Android WebView-versioner til at sende resize
+      // til den indlejrede eksterne side, uden at ændre den synlige størrelse.
+      if (activeBeachSource === 'cartagena') {
+        beachStatusFrame.style.height = 'calc(100% - 1px)';
+        requestAnimationFrame(() => { beachStatusFrame.style.height = '100%'; });
+      }
+    }, 120);
   }
 });
 calibrateGeoBtn.addEventListener('click', () => calibrationMode ? cancelCalibration(true) : startCalibration());
