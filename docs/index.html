@@ -31,6 +31,7 @@ h1 { margin: 0 0 4px; font-size: clamp(1.55rem, 4vw, 2.4rem); line-height: 1.05;
 }
 /* Give strand- and busvisningen mere plads.
    Catastro-resultatet skjules sammen med søgningen, men bevarer sin tilstand. */
+body.content-view .header,
 body.content-view .search-panel,
 body.content-view .catastro-card { display: none !important; }
 .search-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 10px; }
@@ -590,6 +591,60 @@ body.landscape-mode.phone-mode .bus-day-btn { min-height: 36px; padding: 3px 9px
 body.landscape-mode.phone-mode .bus-plan-status { padding: 5px 8px; font-size: .76rem; }
 body.landscape-mode.phone-mode .bus-departure { margin: 4px 0; padding: 6px 8px; }
 body.landscape-mode.phone-mode .bus-plan-footer { padding: 3px 7px; font-size: .66rem; }
+
+
+
+/* Større visningsvinduer til Strand, alle strand-undermenuer og Busplan.
+   Når en af disse visninger er aktiv, bruges næsten hele skærmens højde og bredde. */
+body.content-view {
+  height: 100dvh;
+  min-height: 100dvh;
+  padding: 6px;
+  overflow: hidden;
+}
+body.content-view .app {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+body.content-view .map-card {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+}
+body.content-view .toolbar {
+  flex: 0 0 auto;
+}
+body.content-view .map-viewport {
+  flex: 1 1 auto;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+}
+body.content-view .map-card > .note,
+body.content-view #copyrightNote,
+body.content-view .pnoa-attribution {
+  display: none !important;
+}
+
+/* På små telefonskærme reduceres ydermargenen yderligere. */
+body.phone-mode.content-view {
+  padding: 3px;
+}
+body.phone-mode.content-view .map-card {
+  border-radius: 8px;
+}
+
+/* I liggende telefonvisning fylder indholdet også hele den tilgængelige højde. */
+body.landscape-mode.phone-mode.content-view .app,
+body.landscape-mode.phone-mode.content-view .map-card {
+  height: 100%;
+}
 
 </style>
 
