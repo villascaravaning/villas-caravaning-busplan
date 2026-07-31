@@ -1028,6 +1028,110 @@ body.landscape-mode.phone-mode .fuel-footer { padding: 3px 7px; font-size: .64re
   }
 }
 
+
+/* InfoHub 1.3.1 – synlig funktionsmenu uden vandret rulning
+   Pladskort, Luftfoto, Strand, Busplan og Benzin står ved siden af hinanden.
+   Når bredden ikke er tilstrækkelig, fortsætter knapperne automatisk på næste linje. */
+.toolbar {
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  height: auto !important;
+  overflow: visible !important;
+}
+.toolbar-main {
+  min-width: 0 !important;
+  flex: 1 1 540px !important;
+  width: auto !important;
+  overflow: visible !important;
+}
+.layer-switch {
+  display: flex !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  flex: 1 1 100% !important;
+  flex-wrap: wrap !important;
+  align-items: stretch !important;
+  gap: 6px !important;
+  overflow: visible !important;
+  padding: 2px 0 !important;
+  scrollbar-width: auto !important;
+  overscroll-behavior-x: auto !important;
+  scroll-behavior: auto !important;
+  touch-action: manipulation !important;
+}
+.layer-switch::-webkit-scrollbar {
+  display: none !important;
+}
+.layer-switch button {
+  flex: 1 1 96px !important;
+  width: auto !important;
+  min-width: 92px !important;
+  max-width: none !important;
+  white-space: nowrap !important;
+  text-align: center !important;
+}
+.zoom-controls {
+  flex: 0 0 auto !important;
+  margin-left: auto !important;
+}
+
+/* Telefon og Android WebView */
+body.phone-mode .toolbar,
+body.landscape-mode.phone-mode .toolbar {
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+body.phone-mode .toolbar-main,
+body.landscape-mode.phone-mode .toolbar-main {
+  width: 100% !important;
+  min-width: 0 !important;
+  flex: 1 1 100% !important;
+  overflow: visible !important;
+}
+body.phone-mode .layer-switch,
+body.landscape-mode.phone-mode .layer-switch {
+  width: 100% !important;
+  min-width: 0 !important;
+  flex: 1 1 100% !important;
+  flex-wrap: wrap !important;
+  overflow: visible !important;
+}
+body.phone-mode .layer-switch button {
+  flex: 1 1 96px !important;
+  min-width: 92px !important;
+  min-height: 42px !important;
+  padding: 0 10px !important;
+}
+body.landscape-mode.phone-mode .layer-switch button {
+  flex: 1 1 96px !important;
+  min-width: 92px !important;
+  min-height: 36px !important;
+  padding: 0 9px !important;
+}
+body.phone-mode .zoom-controls,
+body.landscape-mode.phone-mode .zoom-controls {
+  margin-left: auto !important;
+}
+
+/* På meget smalle skærme bruges to knapper pr. række, hvor pladsen tillader det. */
+@media (max-width: 390px) {
+  body.phone-mode .layer-switch button {
+    flex-basis: calc(50% - 4px) !important;
+    min-width: 0 !important;
+  }
+}
+
+/* Den højere værktøjslinje må ikke skubbe indholdet ud af appens fuldskærmsvisninger. */
+body.content-view .toolbar {
+  flex: 0 0 auto !important;
+}
+body.content-view .map-viewport {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+}
+
 </style>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
@@ -5880,21 +5984,8 @@ function useFuelGeolocation() {
   }, { enableHighAccuracy: false, timeout: 12000, maximumAge: 60000 });
 }
 
-function keepLayerButtonVisible(button, behavior = 'smooth') {
-  const strip = document.getElementById('layerSwitch');
-  if (!strip || !button) return;
-  requestAnimationFrame(() => {
-    const margin = 12;
-    const buttonLeft = button.offsetLeft;
-    const buttonRight = buttonLeft + button.offsetWidth;
-    const visibleLeft = strip.scrollLeft;
-    const visibleRight = visibleLeft + strip.clientWidth;
-    if (buttonLeft < visibleLeft + margin || buttonRight > visibleRight - margin) {
-      const targetLeft = Math.max(0, buttonLeft - (strip.clientWidth - button.offsetWidth) / 2);
-      if (typeof strip.scrollTo === 'function') strip.scrollTo({ left: targetLeft, behavior });
-      else strip.scrollLeft = targetLeft;
-    }
-  });
+function keepLayerButtonVisible(button) {
+  // Knapperne ombrydes nu til flere synlige linjer, så vandret rulning er ikke nødvendig.
 }
 
 setInterval(() => {
