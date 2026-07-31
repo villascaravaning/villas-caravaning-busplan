@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- InfoHub build: Benzin 95 E5 direct official API pane -->
 <title id="docTitle">Villas Caravaning · Leaflet GML – alle sektorer</title>
 <style>
 :root {
@@ -29,11 +30,6 @@ h1 { margin: 0 0 4px; font-size: clamp(1.55rem, 4vw, 2.4rem); line-height: 1.05;
   background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 14px;
   box-shadow: 0 8px 24px rgba(15, 23, 42, .07); margin-bottom: 14px;
 }
-/* Give strand- and busvisningen mere plads.
-   Catastro-resultatet skjules sammen med søgningen, men bevarer sin tilstand. */
-body.content-view .header,
-body.content-view .search-panel,
-body.content-view .catastro-card { display: none !important; }
 .search-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 10px; }
 #clearBtn { background: #64748b; }
 #clearBtn:hover { background: #475569; }
@@ -73,12 +69,6 @@ button:hover { background: #111827; }
 .catastro-value { font-weight: 700; overflow-wrap: anywhere; }
 .catastro-value a { color: #1f4ed8; text-decoration: none; }
 .catastro-value a:hover { text-decoration: underline; }
-.catastro-ref-button {
-  appearance: none; border: 0; background: transparent; color: #1f4ed8; padding: 0; min-height: 0;
-  font: inherit; font-weight: 800; text-align: left; cursor: pointer; text-decoration: underline;
-}
-.catastro-ref-button:hover { color: #1536a3; background: transparent; }
-.catastro-card.compact .catastro-note { display: none; }
 .catastro-note { margin: 12px 0 0; color: var(--muted); font-size: .82rem; line-height: 1.45; }
 @media (max-width: 620px) { .catastro-grid { grid-template-columns: 1fr; } .catastro-head { flex-direction: column; } }
 .map-card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(15,23,42,.07); }
@@ -594,85 +584,98 @@ body.landscape-mode.phone-mode .bus-plan-footer { padding: 3px 7px; font-size: .
 
 
 
-/* Større visningsvinduer til Strand, alle strand-undermenuer og Busplan.
-   Når en af disse visninger er aktiv, bruges næsten hele skærmens højde og bredde. */
-body.content-view {
-  height: 100dvh;
-  min-height: 100dvh;
-  padding: 6px;
-  overflow: hidden;
+/* Live petrol prices – official ministry REST data */
+.fuel-pane {
+  position: absolute; inset: 0; z-index: 5; display: none; flex-direction: column;
+  background: #f8fafc; overflow: hidden;
 }
-body.content-view .app {
-  width: 100%;
-  max-width: none;
-  height: 100%;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
+.fuel-pane.visible { display: flex; }
+.fuel-head {
+  flex: 0 0 auto; padding: 11px 12px; background: #fff; border-bottom: 1px solid var(--line);
 }
-body.content-view .map-card {
-  flex: 1 1 auto;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  border-radius: 12px;
+.fuel-head-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
 }
-body.content-view .toolbar {
-  flex: 0 0 auto;
+.fuel-heading { font-size: 1.05rem; }
+.fuel-updated { display: block; margin-top: 3px; color: var(--muted); font-size: .76rem; line-height: 1.35; }
+.fuel-controls {
+  flex: 0 0 auto; display: grid; grid-template-columns: minmax(105px, .8fr) minmax(115px, .9fr) auto auto;
+  gap: 7px; align-items: end; padding: 9px 10px; background: #fff; border-bottom: 1px solid var(--line);
 }
-body.content-view .map-viewport {
-  flex: 1 1 auto;
-  height: auto !important;
-  min-height: 0 !important;
-  max-height: none !important;
+.fuel-field label { display: block; margin: 0 0 4px; color: var(--muted); font-size: .72rem; }
+.fuel-field select {
+  width: 100%; min-height: 38px; padding: 0 9px; border: 1px solid #cdd6e1; border-radius: 9px;
+  background: #fff; color: var(--ink); font: inherit;
 }
-body.content-view .map-card > .note,
-body.content-view #copyrightNote,
-body.content-view .pnoa-attribution {
-  display: none !important;
+.fuel-control-btn {
+  min-height: 38px; padding: 0 11px; border-radius: 9px; background: #fff; color: var(--ink);
+  border: 1px solid #cdd6e1; font-size: .82rem; white-space: nowrap;
 }
-
-/* På små telefonskærme reduceres ydermargenen yderligere. */
-body.phone-mode.content-view {
-  padding: 3px;
+.fuel-control-btn:hover { background: #f1f5f9; }
+.fuel-control-btn.primary { background: #1f2937; color: #fff; border-color: #1f2937; }
+.fuel-control-btn.primary:hover { background: #111827; }
+.fuel-status { flex: 0 0 auto; padding: 9px 12px; color: var(--muted); font-size: .86rem; line-height: 1.38; }
+.fuel-status.error { color: #991b1b; background: #fff1f2; }
+.fuel-status.warning { color: #92400e; background: #fffbeb; }
+.fuel-toolbar {
+  flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 7px 10px; background: #fff; border-bottom: 1px solid var(--line);
 }
-body.phone-mode.content-view .map-card {
-  border-radius: 8px;
+.fuel-location { min-width: 0; color: var(--muted); font-size: .76rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fuel-sort { display: flex; gap: 5px; flex: 0 0 auto; }
+.fuel-sort button {
+  min-height: 32px; padding: 0 9px; border-radius: 999px; background: #fff; color: var(--ink);
+  border: 1px solid #cdd6e1; font-size: .74rem;
 }
-
-/* I liggende telefonvisning fylder indholdet også hele den tilgængelige højde. */
-body.landscape-mode.phone-mode.content-view .app,
-body.landscape-mode.phone-mode.content-view .map-card {
-  height: 100%;
+.fuel-sort button.active { background: #1f2937; color: #fff; border-color: #1f2937; }
+.fuel-list { flex: 1 1 auto; min-height: 0; overflow: auto; padding: 4px 9px 11px; -webkit-overflow-scrolling: touch; }
+.fuel-card {
+  padding: 11px; margin: 7px 0; background: #fff; border: 1px solid var(--line);
+  border-radius: 12px; box-shadow: 0 2px 8px rgba(15,23,42,.04);
 }
-
-/* Stabil visning af den eksterne Strand Status-side.
-   Den indlejrede side får sin egen rulning og påvirkes ikke af platformens CSS-zoom. */
-body.beach-native-view .beach-frame-viewport {
-  overflow: hidden !important;
-  overscroll-behavior: contain;
+.fuel-card-top { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: start; }
+.fuel-brand { font-weight: 900; overflow-wrap: anywhere; }
+.fuel-address { margin-top: 3px; color: var(--muted); font-size: .77rem; line-height: 1.35; overflow-wrap: anywhere; }
+.fuel-price { text-align: right; white-space: nowrap; }
+.fuel-price strong { display: block; color: #0f6b3d; font-size: 1.28rem; }
+.fuel-price span { color: var(--muted); font-size: .68rem; }
+.fuel-detail { display: flex; flex-wrap: wrap; gap: 5px 13px; margin-top: 8px; color: var(--muted); font-size: .74rem; line-height: 1.35; }
+.fuel-route {
+  display: inline-flex; align-items: center; justify-content: center; margin-top: 9px; min-height: 34px;
+  padding: 0 10px; border-radius: 9px; background: #e9eef4; color: var(--ink);
+  text-decoration: none; font-size: .78rem; font-weight: 800;
 }
-body.beach-native-view .beach-frame-canvas {
-  width: 100% !important;
-  height: 100% !important;
-  min-width: 100% !important;
-  min-height: 100% !important;
+.fuel-route:hover { background: #dbe3ec; }
+.fuel-empty { padding: 25px 12px; text-align: center; color: var(--muted); }
+.fuel-footer {
+  flex: 0 0 auto; padding: 6px 10px; border-top: 1px solid var(--line);
+  background: #fff; color: var(--muted); font-size: .7rem; line-height: 1.35;
 }
-body.beach-native-view .beach-status-frame {
-  width: 100% !important;
-  height: 100% !important;
-  min-height: 100% !important;
-  transform: none !important;
-  touch-action: pan-x pan-y;
+.fuel-footer a { color: #1f4ed8; text-decoration: none; font-weight: 700; }
+.fuel-footer a:hover { text-decoration: underline; }
+.fuel-spinner {
+  display: inline-block; width: 15px; height: 15px; margin-right: 7px; vertical-align: -3px;
+  border: 3px solid rgba(31,41,55,.18); border-top-color: #1f2937; border-radius: 50%;
+  animation: fuelSpin .8s linear infinite;
 }
-body.beach-native-view .beach-zoom-controls {
-  display: none !important;
+@keyframes fuelSpin { to { transform: rotate(360deg); } }
+body.phone-mode .fuel-head { padding: 8px 9px; }
+body.phone-mode .fuel-controls { grid-template-columns: 1fr 1fr; padding: 7px 8px; }
+body.phone-mode .fuel-control-btn { width: 100%; }
+body.phone-mode .fuel-list { padding: 3px 7px 9px; }
+body.phone-mode .fuel-card { padding: 9px; }
+body.landscape-mode.phone-mode .fuel-head { padding: 4px 7px; }
+body.landscape-mode.phone-mode .fuel-updated { display: none; }
+body.landscape-mode.phone-mode .fuel-controls {
+  grid-template-columns: 100px 110px auto auto; padding: 4px 6px; gap: 5px;
 }
-body.phone-mode.content-view .beach-status-footer {
-  max-height: 112px;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
+body.landscape-mode.phone-mode .fuel-field label { display: none; }
+body.landscape-mode.phone-mode .fuel-field select,
+body.landscape-mode.phone-mode .fuel-control-btn { min-height: 34px; }
+body.landscape-mode.phone-mode .fuel-status { padding: 4px 7px; font-size: .72rem; }
+body.landscape-mode.phone-mode .fuel-toolbar { padding: 3px 6px; }
+body.landscape-mode.phone-mode .fuel-card { margin: 4px 0; padding: 7px 8px; }
+body.landscape-mode.phone-mode .fuel-footer { padding: 3px 7px; font-size: .64rem; }
 
 </style>
 
@@ -688,7 +691,7 @@ body.phone-mode.content-view .beach-status-footer {
     </div>
   </div>
 
-  <section class="search-panel" id="searchPanel" aria-label="Søgning">
+  <section class="search-panel" aria-label="Søgning">
     <div class="search-row">
       <input id="parcelInput" type="text" inputmode="text" autocomplete="off" placeholder="Fx A 37, piscina, Schwimmbad, piscine..." aria-describedby="status">
       <button id="findBtn" type="button">Søg på kortet</button>
@@ -715,6 +718,7 @@ body.phone-mode.content-view .beach-status-footer {
           <button id="aerialLayerBtn" type="button" aria-pressed="false">Luftfoto</button>
           <button id="beachStatusBtn" type="button" class="map-link-btn" aria-pressed="false">Strand</button>
           <button id="busPlanBtn" type="button" class="map-link-btn" aria-pressed="false">Busplan</button>
+          <button id="fuelBtn" type="button" class="map-link-btn" aria-pressed="false">Benzin</button>
           <button id="calibrateGeoBtn" type="button" class="calibration-action" hidden>Gem position</button>
           <button id="exportGeoBtn" type="button" class="calibration-action" hidden>Eksportér punkter</button>
         </div>
@@ -737,7 +741,7 @@ body.phone-mode.content-view .beach-status-footer {
         </div>
         <div id="beachFrameViewport" class="beach-frame-viewport">
           <div id="beachFrameCanvas" class="beach-frame-canvas">
-            <iframe id="beachStatusFrame" class="beach-status-frame" title="Strand Status" loading="lazy" scrolling="yes" data-src="https://www.cartagena.es/callejero/verMapaEstadoPlayas.asp"></iframe>
+            <iframe id="beachStatusFrame" class="beach-status-frame" title="Strand Status" loading="lazy" data-src="https://www.cartagena.es/callejero/verMapaEstadoPlayas.asp"></iframe>
           </div>
           <div id="beachZoomControls" class="beach-zoom-controls" aria-label="Zoom strandinformation">
             <button id="beachZoomOut" type="button" title="Zoom ud">−</button>
@@ -762,6 +766,50 @@ body.phone-mode.content-view .beach-status-footer {
         <div id="busPlanStatus" class="bus-plan-status" aria-live="polite">Busplanen indlæses, når fanen åbnes.</div>
         <div id="busPlanDepartures" class="bus-plan-list"></div>
         <div id="busPlanFooter" class="bus-plan-footer"></div>
+      </div>
+      <div id="fuelPane" class="fuel-pane" aria-label="Benzinpriser">
+        <div class="fuel-head">
+          <div class="fuel-head-row">
+            <div>
+              <strong id="fuelHeading" class="fuel-heading">Benzin 95 E5</strong>
+              <span id="fuelUpdated" class="fuel-updated">Hentes direkte fra den officielle tjeneste</span>
+            </div>
+          </div>
+        </div>
+        <div class="fuel-controls">
+          <div class="fuel-field">
+            <label id="fuelRadiusLabel" for="fuelRadius">Radius</label>
+            <select id="fuelRadius">
+              <option value="5">5 km</option>
+              <option value="10">10 km</option>
+              <option value="25" selected>25 km</option>
+              <option value="50">50 km</option>
+              <option value="100">100 km</option>
+            </select>
+          </div>
+          <div class="fuel-field">
+            <label id="fuelCountLabel" for="fuelCount">Antal</label>
+            <select id="fuelCount">
+              <option value="10">10</option>
+              <option value="20" selected>20</option>
+              <option value="50">50</option>
+              <option value="999">Alle</option>
+            </select>
+          </div>
+          <button id="fuelHomeBtn" class="fuel-control-btn" type="button">Villas Caravaning</button>
+          <button id="fuelGeoBtn" class="fuel-control-btn" type="button">Min position</button>
+        </div>
+        <div id="fuelStatus" class="fuel-status" aria-live="polite">Priserne indlæses, når fanen åbnes.</div>
+        <div class="fuel-toolbar">
+          <div id="fuelLocation" class="fuel-location">Udgangspunkt: Villas Caravaning</div>
+          <div class="fuel-sort" aria-label="Sortering">
+            <button id="fuelSortDistance" class="active" type="button">Nærmeste</button>
+            <button id="fuelSortPrice" type="button">Billigste</button>
+            <button id="fuelRefresh" type="button">Opdater</button>
+          </div>
+        </div>
+        <div id="fuelList" class="fuel-list"></div>
+        <div id="fuelFooter" class="fuel-footer"></div>
       </div>
       <div id="leafletLoadError" class="leaflet-load-error">Kortmotoren kunne ikke indlæses. Kontrollér internetforbindelsen og genindlæs siden.</div>
     </div>
@@ -3266,7 +3314,6 @@ const CATASTRO_COORDS_URL = 'https://ovc.catastro.meh.es/OVCServWeb/OVCWcfCallej
 const CATASTRO_DNPRC_URL = 'https://ovc.catastro.meh.es/OVCServWeb/OVCWcfCallejero/COVCCallejero.svc/json/Consulta_DNPRC';
 const catastroLookupCache = new Map();
 let catastroRequestToken = 0;
-let catastroExpandedParcelKey = '';
 
 const CATASTRO_TEXT = {
   da: {
@@ -3739,6 +3786,92 @@ const BUS_PLAN_TERMS_URL = 'https://nap.transportes.gob.es/condiciones-uso';
 const BUS_PLAN_FALLBACK_URL = 'https://raw.githubusercontent.com/villascaravaning/villas-caravaning-busplan/main/docs/busplan-villas-caravaning.json';
 const BUS_PLAN_EMBEDDED_FALLBACK = {"schema":"villas-caravaning-busplan","version":1,"generatedAt":"2026-07-12T16:25:25.747626+02:00","timezone":"Europe/Madrid","validForDays":14,"source":{"name":"NAP Transporte Multimodal / ALSA","attribution":"Powered by MITRAMS","license":"https://nap.transportes.gob.es/licencia-datos","note":"Busplanen vises som bearbejdede åbne data og opdateres automatisk. Oplysningerne er vejledende og kan indeholde fejl eller ændringer."},"stops":[{"stop_id":"0000757000000001","name":"Caravaning Camping","lat":37.62445563,"lon":-0.74333539},{"stop_id":"0002243300000001","name":"Camping Caravanning","lat":37.62445563,"lon":-0.74333539}],"routes":[{"routeId":"22032","shortName":"ALSA - L23i","longName":"L23 ida La Manga-Santiago de la Ribera","url":"http://www.alsa.es"},{"routeId":"22033","shortName":"ALSA - L23v","longName":"L23 vta Santiago de la Ribera-La Manga","url":"http://www.alsa.es"},{"routeId":"22026","shortName":"ALSA - L43i Puebl","longName":"L43 Cartagena-La Manga","url":"http://www.alsa.es"},{"routeId":"22027","shortName":"ALSA - L43v Puebl","longName":"L43 La Manga-Cartagena","url":"http://www.alsa.es"},{"routeId":"22048","shortName":"ALSA - R-6 Ida","longName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","url":"http://www.alsa.es"},{"routeId":"22049","shortName":"ALSA - R-6 Vta","longName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","url":"http://www.alsa.es"}],"days":[{"date":"2026-07-12","weekday":"Sunday","departures":[{"time":"00:55","rawTime":"00:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001003","serviceId":"000003900002203200001003"},{"time":"01:00","rawTime":"01:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001004","serviceId":"000003900002203300001004"},{"time":"01:10","rawTime":"01:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001415","serviceId":"000003900002202700001415"},{"time":"01:55","rawTime":"01:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001004","serviceId":"000003900002203200001004"},{"time":"02:00","rawTime":"02:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001005","serviceId":"000003900002203300001005"},{"time":"02:40","rawTime":"02:40:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001410","serviceId":"000003900002202700001410"},{"time":"03:00","rawTime":"03:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001006","serviceId":"000003900002203300001006"},{"time":"04:55","rawTime":"04:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001005","serviceId":"000003900002203200001005"},{"time":"05:55","rawTime":"05:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001006","serviceId":"000003900002203200001006"},{"time":"06:55","rawTime":"06:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001007","serviceId":"000003900002203200001007"},{"time":"08:10","rawTime":"08:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001401","serviceId":"000003900002202700001401"},{"time":"08:50","rawTime":"08:50:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001421","serviceId":"000003900002202600001421"},{"time":"10:05","rawTime":"10:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000204","serviceId":"000003900002204800000204"},{"time":"10:52","rawTime":"10:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001406","serviceId":"000003900002202700001406"},{"time":"12:10","rawTime":"12:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001402","serviceId":"000003900002202700001402"},{"time":"12:52","rawTime":"12:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001412","serviceId":"000003900002202700001412"},{"time":"14:10","rawTime":"14:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001417","serviceId":"000003900002202700001417"},{"time":"14:10","rawTime":"14:10:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000204","serviceId":"000003900002204900000204"},{"time":"15:10","rawTime":"15:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001407","serviceId":"000003900002202700001407"},{"time":"15:52","rawTime":"15:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001403","serviceId":"000003900002202700001403"},{"time":"16:35","rawTime":"16:35:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000205","serviceId":"000003900002204800000205"},{"time":"17:10","rawTime":"17:10:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000205","serviceId":"000003900002204900000205"},{"time":"19:10","rawTime":"19:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001408","serviceId":"000003900002202700001408"},{"time":"20:05","rawTime":"20:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000206","serviceId":"000003900002204800000206"},{"time":"20:10","rawTime":"20:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001404","serviceId":"000003900002202700001404"},{"time":"20:20","rawTime":"20:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001418","serviceId":"000003900002202600001418"},{"time":"20:40","rawTime":"20:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000206","serviceId":"000003900002204900000206"},{"time":"21:10","rawTime":"21:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001414","serviceId":"000003900002202700001414"},{"time":"21:52","rawTime":"21:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001419","serviceId":"000003900002202700001419"},{"time":"22:52","rawTime":"22:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001409","serviceId":"000003900002202700001409"}]},{"date":"2026-07-13","weekday":"Monday","departures":[{"time":"01:10","rawTime":"01:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001415","serviceId":"000003900002202700001415"},{"time":"02:40","rawTime":"02:40:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001410","serviceId":"000003900002202700001410"},{"time":"09:05","rawTime":"09:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000014","serviceId":"000003900002204800000014"},{"time":"09:10","rawTime":"09:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001324","serviceId":"000003900002202700001324"},{"time":"09:40","rawTime":"09:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000012","serviceId":"000003900002204900000012"},{"time":"10:10","rawTime":"10:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001308","serviceId":"000003900002202700001308"},{"time":"10:52","rawTime":"10:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001314","serviceId":"000003900002202700001314"},{"time":"12:05","rawTime":"12:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000015","serviceId":"000003900002204800000015"},{"time":"12:10","rawTime":"12:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001325","serviceId":"000003900002202700001325"},{"time":"12:40","rawTime":"12:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000013","serviceId":"000003900002204900000013"},{"time":"12:52","rawTime":"12:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001309","serviceId":"000003900002202700001309"},{"time":"14:10","rawTime":"14:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001315","serviceId":"000003900002202700001315"},{"time":"14:20","rawTime":"14:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001335","serviceId":"000003900002202600001335"},{"time":"15:05","rawTime":"15:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000016","serviceId":"000003900002204800000016"},{"time":"15:10","rawTime":"15:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001326","serviceId":"000003900002202700001326"},{"time":"15:40","rawTime":"15:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000014","serviceId":"000003900002204900000014"},{"time":"17:10","rawTime":"17:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001316","serviceId":"000003900002202700001316"},{"time":"18:05","rawTime":"18:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000017","serviceId":"000003900002204800000017"},{"time":"18:40","rawTime":"18:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000015","serviceId":"000003900002204900000015"},{"time":"19:10","rawTime":"19:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001311","serviceId":"000003900002202700001311"},{"time":"20:10","rawTime":"20:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001317","serviceId":"000003900002202700001317"},{"time":"20:20","rawTime":"20:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001337","serviceId":"000003900002202600001337"},{"time":"21:05","rawTime":"21:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000018","serviceId":"000003900002204800000018"},{"time":"21:10","rawTime":"21:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001328","serviceId":"000003900002202700001328"},{"time":"21:40","rawTime":"21:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000016","serviceId":"000003900002204900000016"},{"time":"21:52","rawTime":"21:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001312","serviceId":"000003900002202700001312"},{"time":"22:52","rawTime":"22:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001322","serviceId":"000003900002202700001322"},{"time":"23:52","rawTime":"23:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001340","serviceId":"000003900002202700001340"}]},{"date":"2026-07-14","weekday":"Tuesday","departures":[{"time":"02:40","rawTime":"02:40:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001323","serviceId":"000003900002202700001323"},{"time":"09:05","rawTime":"09:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000014","serviceId":"000003900002204800000014"},{"time":"09:10","rawTime":"09:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001324","serviceId":"000003900002202700001324"},{"time":"09:40","rawTime":"09:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000012","serviceId":"000003900002204900000012"},{"time":"10:10","rawTime":"10:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001308","serviceId":"000003900002202700001308"},{"time":"10:52","rawTime":"10:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001314","serviceId":"000003900002202700001314"},{"time":"12:05","rawTime":"12:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000015","serviceId":"000003900002204800000015"},{"time":"12:10","rawTime":"12:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001325","serviceId":"000003900002202700001325"},{"time":"12:40","rawTime":"12:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000013","serviceId":"000003900002204900000013"},{"time":"12:52","rawTime":"12:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001309","serviceId":"000003900002202700001309"},{"time":"14:10","rawTime":"14:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001315","serviceId":"000003900002202700001315"},{"time":"14:20","rawTime":"14:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001335","serviceId":"000003900002202600001335"},{"time":"15:05","rawTime":"15:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000016","serviceId":"000003900002204800000016"},{"time":"15:10","rawTime":"15:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001326","serviceId":"000003900002202700001326"},{"time":"15:40","rawTime":"15:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000014","serviceId":"000003900002204900000014"},{"time":"17:10","rawTime":"17:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001316","serviceId":"000003900002202700001316"},{"time":"18:05","rawTime":"18:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000017","serviceId":"000003900002204800000017"},{"time":"18:40","rawTime":"18:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000015","serviceId":"000003900002204900000015"},{"time":"19:10","rawTime":"19:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001311","serviceId":"000003900002202700001311"},{"time":"20:10","rawTime":"20:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001317","serviceId":"000003900002202700001317"},{"time":"20:20","rawTime":"20:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001337","serviceId":"000003900002202600001337"},{"time":"21:05","rawTime":"21:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000018","serviceId":"000003900002204800000018"},{"time":"21:10","rawTime":"21:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001328","serviceId":"000003900002202700001328"},{"time":"21:40","rawTime":"21:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000016","serviceId":"000003900002204900000016"},{"time":"21:52","rawTime":"21:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001312","serviceId":"000003900002202700001312"},{"time":"22:52","rawTime":"22:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001322","serviceId":"000003900002202700001322"},{"time":"23:52","rawTime":"23:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001340","serviceId":"000003900002202700001340"}]},{"date":"2026-07-15","weekday":"Wednesday","departures":[{"time":"02:40","rawTime":"02:40:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001323","serviceId":"000003900002202700001323"},{"time":"09:05","rawTime":"09:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000014","serviceId":"000003900002204800000014"},{"time":"09:10","rawTime":"09:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001324","serviceId":"000003900002202700001324"},{"time":"09:40","rawTime":"09:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000012","serviceId":"000003900002204900000012"},{"time":"10:10","rawTime":"10:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001308","serviceId":"000003900002202700001308"},{"time":"10:52","rawTime":"10:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001314","serviceId":"000003900002202700001314"},{"time":"12:05","rawTime":"12:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000015","serviceId":"000003900002204800000015"},{"time":"12:10","rawTime":"12:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001325","serviceId":"000003900002202700001325"},{"time":"12:40","rawTime":"12:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000013","serviceId":"000003900002204900000013"},{"time":"12:52","rawTime":"12:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001309","serviceId":"000003900002202700001309"},{"time":"14:10","rawTime":"14:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001315","serviceId":"000003900002202700001315"},{"time":"14:20","rawTime":"14:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001335","serviceId":"000003900002202600001335"},{"time":"15:05","rawTime":"15:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000016","serviceId":"000003900002204800000016"},{"time":"15:10","rawTime":"15:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001326","serviceId":"000003900002202700001326"},{"time":"15:40","rawTime":"15:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000014","serviceId":"000003900002204900000014"},{"time":"17:10","rawTime":"17:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001316","serviceId":"000003900002202700001316"},{"time":"18:05","rawTime":"18:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000017","serviceId":"000003900002204800000017"},{"time":"18:40","rawTime":"18:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000015","serviceId":"000003900002204900000015"},{"time":"19:10","rawTime":"19:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001311","serviceId":"000003900002202700001311"},{"time":"20:10","rawTime":"20:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001317","serviceId":"000003900002202700001317"},{"time":"20:20","rawTime":"20:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001337","serviceId":"000003900002202600001337"},{"time":"21:05","rawTime":"21:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000018","serviceId":"000003900002204800000018"},{"time":"21:10","rawTime":"21:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001328","serviceId":"000003900002202700001328"},{"time":"21:40","rawTime":"21:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000016","serviceId":"000003900002204900000016"},{"time":"21:52","rawTime":"21:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001312","serviceId":"000003900002202700001312"},{"time":"22:52","rawTime":"22:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001322","serviceId":"000003900002202700001322"},{"time":"23:52","rawTime":"23:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001340","serviceId":"000003900002202700001340"}]},{"date":"2026-07-16","weekday":"Thursday","departures":[{"time":"02:40","rawTime":"02:40:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001323","serviceId":"000003900002202700001323"},{"time":"09:05","rawTime":"09:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000014","serviceId":"000003900002204800000014"},{"time":"09:10","rawTime":"09:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001324","serviceId":"000003900002202700001324"},{"time":"09:40","rawTime":"09:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000012","serviceId":"000003900002204900000012"},{"time":"10:10","rawTime":"10:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001308","serviceId":"000003900002202700001308"},{"time":"10:52","rawTime":"10:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001314","serviceId":"000003900002202700001314"},{"time":"12:05","rawTime":"12:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000015","serviceId":"000003900002204800000015"},{"time":"12:10","rawTime":"12:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001325","serviceId":"000003900002202700001325"},{"time":"12:40","rawTime":"12:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000013","serviceId":"000003900002204900000013"},{"time":"12:52","rawTime":"12:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001309","serviceId":"000003900002202700001309"},{"time":"14:10","rawTime":"14:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001315","serviceId":"000003900002202700001315"},{"time":"14:20","rawTime":"14:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001335","serviceId":"000003900002202600001335"},{"time":"15:05","rawTime":"15:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000016","serviceId":"000003900002204800000016"},{"time":"15:10","rawTime":"15:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001326","serviceId":"000003900002202700001326"},{"time":"15:40","rawTime":"15:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000014","serviceId":"000003900002204900000014"},{"time":"17:10","rawTime":"17:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001316","serviceId":"000003900002202700001316"},{"time":"18:05","rawTime":"18:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000017","serviceId":"000003900002204800000017"},{"time":"18:40","rawTime":"18:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000015","serviceId":"000003900002204900000015"},{"time":"19:10","rawTime":"19:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001311","serviceId":"000003900002202700001311"},{"time":"20:10","rawTime":"20:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001317","serviceId":"000003900002202700001317"},{"time":"20:20","rawTime":"20:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001337","serviceId":"000003900002202600001337"},{"time":"21:05","rawTime":"21:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000018","serviceId":"000003900002204800000018"},{"time":"21:10","rawTime":"21:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001328","serviceId":"000003900002202700001328"},{"time":"21:40","rawTime":"21:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000016","serviceId":"000003900002204900000016"},{"time":"21:52","rawTime":"21:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001312","serviceId":"000003900002202700001312"},{"time":"22:52","rawTime":"22:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001322","serviceId":"000003900002202700001322"},{"time":"23:52","rawTime":"23:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001340","serviceId":"000003900002202700001340"}]},{"date":"2026-07-17","weekday":"Friday","departures":[{"time":"02:40","rawTime":"02:40:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001323","serviceId":"000003900002202700001323"},{"time":"09:05","rawTime":"09:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000014","serviceId":"000003900002204800000014"},{"time":"09:10","rawTime":"09:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001324","serviceId":"000003900002202700001324"},{"time":"09:40","rawTime":"09:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000012","serviceId":"000003900002204900000012"},{"time":"10:10","rawTime":"10:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001308","serviceId":"000003900002202700001308"},{"time":"10:52","rawTime":"10:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001314","serviceId":"000003900002202700001314"},{"time":"12:05","rawTime":"12:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000015","serviceId":"000003900002204800000015"},{"time":"12:10","rawTime":"12:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001325","serviceId":"000003900002202700001325"},{"time":"12:40","rawTime":"12:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000013","serviceId":"000003900002204900000013"},{"time":"12:52","rawTime":"12:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001309","serviceId":"000003900002202700001309"},{"time":"14:10","rawTime":"14:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001315","serviceId":"000003900002202700001315"},{"time":"14:20","rawTime":"14:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001335","serviceId":"000003900002202600001335"},{"time":"15:05","rawTime":"15:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000016","serviceId":"000003900002204800000016"},{"time":"15:10","rawTime":"15:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001326","serviceId":"000003900002202700001326"},{"time":"15:40","rawTime":"15:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000014","serviceId":"000003900002204900000014"},{"time":"17:10","rawTime":"17:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001316","serviceId":"000003900002202700001316"},{"time":"18:05","rawTime":"18:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000017","serviceId":"000003900002204800000017"},{"time":"18:40","rawTime":"18:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000015","serviceId":"000003900002204900000015"},{"time":"19:10","rawTime":"19:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001311","serviceId":"000003900002202700001311"},{"time":"20:10","rawTime":"20:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001317","serviceId":"000003900002202700001317"},{"time":"20:20","rawTime":"20:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001337","serviceId":"000003900002202600001337"},{"time":"21:05","rawTime":"21:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000018","serviceId":"000003900002204800000018"},{"time":"21:10","rawTime":"21:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001328","serviceId":"000003900002202700001328"},{"time":"21:40","rawTime":"21:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000016","serviceId":"000003900002204900000016"},{"time":"21:52","rawTime":"21:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001312","serviceId":"000003900002202700001312"},{"time":"22:00","rawTime":"22:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001001","serviceId":"000003900002203300001001"},{"time":"22:52","rawTime":"22:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001322","serviceId":"000003900002202700001322"},{"time":"22:55","rawTime":"22:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001001","serviceId":"000003900002203200001001"},{"time":"23:00","rawTime":"23:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001008","serviceId":"000003900002203300001008"},{"time":"23:52","rawTime":"23:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001340","serviceId":"000003900002202700001340"},{"time":"23:55","rawTime":"23:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001002","serviceId":"000003900002203200001002"},{"time":"00:00","rawTime":"24:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001003","serviceId":"000003900002203300001003"}]},{"date":"2026-07-18","weekday":"Saturday","departures":[{"time":"00:55","rawTime":"00:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001003","serviceId":"000003900002203200001003"},{"time":"01:00","rawTime":"01:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001004","serviceId":"000003900002203300001004"},{"time":"01:55","rawTime":"01:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001004","serviceId":"000003900002203200001004"},{"time":"02:00","rawTime":"02:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001005","serviceId":"000003900002203300001005"},{"time":"02:40","rawTime":"02:40:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001323","serviceId":"000003900002202700001323"},{"time":"03:00","rawTime":"03:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001006","serviceId":"000003900002203300001006"},{"time":"04:55","rawTime":"04:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001005","serviceId":"000003900002203200001005"},{"time":"05:55","rawTime":"05:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001006","serviceId":"000003900002203200001006"},{"time":"06:55","rawTime":"06:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001007","serviceId":"000003900002203200001007"},{"time":"08:10","rawTime":"08:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001401","serviceId":"000003900002202700001401"},{"time":"08:50","rawTime":"08:50:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001421","serviceId":"000003900002202600001421"},{"time":"09:35","rawTime":"09:35:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000106","serviceId":"000003900002204800000106"},{"time":"10:52","rawTime":"10:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001406","serviceId":"000003900002202700001406"},{"time":"12:10","rawTime":"12:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001402","serviceId":"000003900002202700001402"},{"time":"12:52","rawTime":"12:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001412","serviceId":"000003900002202700001412"},{"time":"14:10","rawTime":"14:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001417","serviceId":"000003900002202700001417"},{"time":"14:10","rawTime":"14:10:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000108","serviceId":"000003900002204900000108"},{"time":"15:10","rawTime":"15:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001407","serviceId":"000003900002202700001407"},{"time":"15:52","rawTime":"15:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001403","serviceId":"000003900002202700001403"},{"time":"16:35","rawTime":"16:35:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000109","serviceId":"000003900002204800000109"},{"time":"17:10","rawTime":"17:10:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000109","serviceId":"000003900002204900000109"},{"time":"19:10","rawTime":"19:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001408","serviceId":"000003900002202700001408"},{"time":"20:05","rawTime":"20:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000110","serviceId":"000003900002204800000110"},{"time":"20:10","rawTime":"20:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001404","serviceId":"000003900002202700001404"},{"time":"20:20","rawTime":"20:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001418","serviceId":"000003900002202600001418"},{"time":"20:40","rawTime":"20:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000110","serviceId":"000003900002204900000110"},{"time":"21:10","rawTime":"21:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001414","serviceId":"000003900002202700001414"},{"time":"21:52","rawTime":"21:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001419","serviceId":"000003900002202700001419"},{"time":"22:00","rawTime":"22:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001001","serviceId":"000003900002203300001001"},{"time":"22:52","rawTime":"22:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001409","serviceId":"000003900002202700001409"},{"time":"22:55","rawTime":"22:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001001","serviceId":"000003900002203200001001"},{"time":"23:00","rawTime":"23:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001008","serviceId":"000003900002203300001008"},{"time":"23:55","rawTime":"23:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001002","serviceId":"000003900002203200001002"},{"time":"00:00","rawTime":"24:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001003","serviceId":"000003900002203300001003"}]},{"date":"2026-07-19","weekday":"Sunday","departures":[{"time":"00:55","rawTime":"00:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001003","serviceId":"000003900002203200001003"},{"time":"01:00","rawTime":"01:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001004","serviceId":"000003900002203300001004"},{"time":"01:10","rawTime":"01:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001415","serviceId":"000003900002202700001415"},{"time":"01:55","rawTime":"01:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001004","serviceId":"000003900002203200001004"},{"time":"02:00","rawTime":"02:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001005","serviceId":"000003900002203300001005"},{"time":"02:40","rawTime":"02:40:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001410","serviceId":"000003900002202700001410"},{"time":"03:00","rawTime":"03:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001006","serviceId":"000003900002203300001006"},{"time":"04:55","rawTime":"04:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001005","serviceId":"000003900002203200001005"},{"time":"05:55","rawTime":"05:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001006","serviceId":"000003900002203200001006"},{"time":"06:55","rawTime":"06:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001007","serviceId":"000003900002203200001007"},{"time":"08:10","rawTime":"08:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001401","serviceId":"000003900002202700001401"},{"time":"08:50","rawTime":"08:50:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001421","serviceId":"000003900002202600001421"},{"time":"10:05","rawTime":"10:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000204","serviceId":"000003900002204800000204"},{"time":"10:52","rawTime":"10:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001406","serviceId":"000003900002202700001406"},{"time":"12:10","rawTime":"12:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001402","serviceId":"000003900002202700001402"},{"time":"12:52","rawTime":"12:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001412","serviceId":"000003900002202700001412"},{"time":"14:10","rawTime":"14:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001417","serviceId":"000003900002202700001417"},{"time":"14:10","rawTime":"14:10:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000204","serviceId":"000003900002204900000204"},{"time":"15:10","rawTime":"15:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001407","serviceId":"000003900002202700001407"},{"time":"15:52","rawTime":"15:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001403","serviceId":"000003900002202700001403"},{"time":"16:35","rawTime":"16:35:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000205","serviceId":"000003900002204800000205"},{"time":"17:10","rawTime":"17:10:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000205","serviceId":"000003900002204900000205"},{"time":"19:10","rawTime":"19:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001408","serviceId":"000003900002202700001408"},{"time":"20:05","rawTime":"20:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000206","serviceId":"000003900002204800000206"},{"time":"20:10","rawTime":"20:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001404","serviceId":"000003900002202700001404"},{"time":"20:20","rawTime":"20:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001418","serviceId":"000003900002202600001418"},{"time":"20:40","rawTime":"20:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000206","serviceId":"000003900002204900000206"},{"time":"21:10","rawTime":"21:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001414","serviceId":"000003900002202700001414"},{"time":"21:52","rawTime":"21:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001419","serviceId":"000003900002202700001419"},{"time":"22:52","rawTime":"22:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001409","serviceId":"000003900002202700001409"}]},{"date":"2026-07-20","weekday":"Monday","departures":[{"time":"01:10","rawTime":"01:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001415","serviceId":"000003900002202700001415"},{"time":"02:40","rawTime":"02:40:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001410","serviceId":"000003900002202700001410"},{"time":"09:05","rawTime":"09:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000014","serviceId":"000003900002204800000014"},{"time":"09:10","rawTime":"09:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001324","serviceId":"000003900002202700001324"},{"time":"09:40","rawTime":"09:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000012","serviceId":"000003900002204900000012"},{"time":"10:10","rawTime":"10:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001308","serviceId":"000003900002202700001308"},{"time":"10:52","rawTime":"10:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001314","serviceId":"000003900002202700001314"},{"time":"12:05","rawTime":"12:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000015","serviceId":"000003900002204800000015"},{"time":"12:10","rawTime":"12:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001325","serviceId":"000003900002202700001325"},{"time":"12:40","rawTime":"12:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000013","serviceId":"000003900002204900000013"},{"time":"12:52","rawTime":"12:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001309","serviceId":"000003900002202700001309"},{"time":"14:10","rawTime":"14:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001315","serviceId":"000003900002202700001315"},{"time":"14:20","rawTime":"14:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001335","serviceId":"000003900002202600001335"},{"time":"15:05","rawTime":"15:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000016","serviceId":"000003900002204800000016"},{"time":"15:10","rawTime":"15:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001326","serviceId":"000003900002202700001326"},{"time":"15:40","rawTime":"15:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000014","serviceId":"000003900002204900000014"},{"time":"17:10","rawTime":"17:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001316","serviceId":"000003900002202700001316"},{"time":"18:05","rawTime":"18:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000017","serviceId":"000003900002204800000017"},{"time":"18:40","rawTime":"18:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000015","serviceId":"000003900002204900000015"},{"time":"19:10","rawTime":"19:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001311","serviceId":"000003900002202700001311"},{"time":"20:10","rawTime":"20:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001317","serviceId":"000003900002202700001317"},{"time":"20:20","rawTime":"20:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001337","serviceId":"000003900002202600001337"},{"time":"21:05","rawTime":"21:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000018","serviceId":"000003900002204800000018"},{"time":"21:10","rawTime":"21:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001328","serviceId":"000003900002202700001328"},{"time":"21:40","rawTime":"21:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000016","serviceId":"000003900002204900000016"},{"time":"21:52","rawTime":"21:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001312","serviceId":"000003900002202700001312"},{"time":"22:52","rawTime":"22:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001322","serviceId":"000003900002202700001322"},{"time":"23:52","rawTime":"23:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001340","serviceId":"000003900002202700001340"}]},{"date":"2026-07-21","weekday":"Tuesday","departures":[{"time":"02:40","rawTime":"02:40:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001323","serviceId":"000003900002202700001323"},{"time":"09:05","rawTime":"09:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000014","serviceId":"000003900002204800000014"},{"time":"09:10","rawTime":"09:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001324","serviceId":"000003900002202700001324"},{"time":"09:40","rawTime":"09:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000012","serviceId":"000003900002204900000012"},{"time":"10:10","rawTime":"10:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001308","serviceId":"000003900002202700001308"},{"time":"10:52","rawTime":"10:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001314","serviceId":"000003900002202700001314"},{"time":"12:05","rawTime":"12:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000015","serviceId":"000003900002204800000015"},{"time":"12:10","rawTime":"12:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001325","serviceId":"000003900002202700001325"},{"time":"12:40","rawTime":"12:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000013","serviceId":"000003900002204900000013"},{"time":"12:52","rawTime":"12:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001309","serviceId":"000003900002202700001309"},{"time":"14:10","rawTime":"14:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001315","serviceId":"000003900002202700001315"},{"time":"14:20","rawTime":"14:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001335","serviceId":"000003900002202600001335"},{"time":"15:05","rawTime":"15:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000016","serviceId":"000003900002204800000016"},{"time":"15:10","rawTime":"15:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001326","serviceId":"000003900002202700001326"},{"time":"15:40","rawTime":"15:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000014","serviceId":"000003900002204900000014"},{"time":"17:10","rawTime":"17:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001316","serviceId":"000003900002202700001316"},{"time":"18:05","rawTime":"18:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000017","serviceId":"000003900002204800000017"},{"time":"18:40","rawTime":"18:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000015","serviceId":"000003900002204900000015"},{"time":"19:10","rawTime":"19:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001311","serviceId":"000003900002202700001311"},{"time":"20:10","rawTime":"20:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001317","serviceId":"000003900002202700001317"},{"time":"20:20","rawTime":"20:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001337","serviceId":"000003900002202600001337"},{"time":"21:05","rawTime":"21:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000018","serviceId":"000003900002204800000018"},{"time":"21:10","rawTime":"21:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001328","serviceId":"000003900002202700001328"},{"time":"21:40","rawTime":"21:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000016","serviceId":"000003900002204900000016"},{"time":"21:52","rawTime":"21:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001312","serviceId":"000003900002202700001312"},{"time":"22:52","rawTime":"22:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001322","serviceId":"000003900002202700001322"},{"time":"23:52","rawTime":"23:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001340","serviceId":"000003900002202700001340"}]},{"date":"2026-07-22","weekday":"Wednesday","departures":[{"time":"02:40","rawTime":"02:40:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001323","serviceId":"000003900002202700001323"},{"time":"09:05","rawTime":"09:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000014","serviceId":"000003900002204800000014"},{"time":"09:10","rawTime":"09:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001324","serviceId":"000003900002202700001324"},{"time":"09:40","rawTime":"09:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000012","serviceId":"000003900002204900000012"},{"time":"10:10","rawTime":"10:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001308","serviceId":"000003900002202700001308"},{"time":"10:52","rawTime":"10:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001314","serviceId":"000003900002202700001314"},{"time":"12:05","rawTime":"12:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000015","serviceId":"000003900002204800000015"},{"time":"12:10","rawTime":"12:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001325","serviceId":"000003900002202700001325"},{"time":"12:40","rawTime":"12:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000013","serviceId":"000003900002204900000013"},{"time":"12:52","rawTime":"12:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001309","serviceId":"000003900002202700001309"},{"time":"14:10","rawTime":"14:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001315","serviceId":"000003900002202700001315"},{"time":"14:20","rawTime":"14:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001335","serviceId":"000003900002202600001335"},{"time":"15:05","rawTime":"15:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000016","serviceId":"000003900002204800000016"},{"time":"15:10","rawTime":"15:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001326","serviceId":"000003900002202700001326"},{"time":"15:40","rawTime":"15:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000014","serviceId":"000003900002204900000014"},{"time":"17:10","rawTime":"17:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001316","serviceId":"000003900002202700001316"},{"time":"18:05","rawTime":"18:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000017","serviceId":"000003900002204800000017"},{"time":"18:40","rawTime":"18:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000015","serviceId":"000003900002204900000015"},{"time":"19:10","rawTime":"19:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001311","serviceId":"000003900002202700001311"},{"time":"20:10","rawTime":"20:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001317","serviceId":"000003900002202700001317"},{"time":"20:20","rawTime":"20:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001337","serviceId":"000003900002202600001337"},{"time":"21:05","rawTime":"21:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000018","serviceId":"000003900002204800000018"},{"time":"21:10","rawTime":"21:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001328","serviceId":"000003900002202700001328"},{"time":"21:40","rawTime":"21:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000016","serviceId":"000003900002204900000016"},{"time":"21:52","rawTime":"21:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001312","serviceId":"000003900002202700001312"},{"time":"22:52","rawTime":"22:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001322","serviceId":"000003900002202700001322"},{"time":"23:52","rawTime":"23:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001340","serviceId":"000003900002202700001340"}]},{"date":"2026-07-23","weekday":"Thursday","departures":[{"time":"02:40","rawTime":"02:40:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001323","serviceId":"000003900002202700001323"},{"time":"09:05","rawTime":"09:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000014","serviceId":"000003900002204800000014"},{"time":"09:10","rawTime":"09:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001324","serviceId":"000003900002202700001324"},{"time":"09:40","rawTime":"09:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000012","serviceId":"000003900002204900000012"},{"time":"10:10","rawTime":"10:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001308","serviceId":"000003900002202700001308"},{"time":"10:52","rawTime":"10:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001314","serviceId":"000003900002202700001314"},{"time":"12:05","rawTime":"12:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000015","serviceId":"000003900002204800000015"},{"time":"12:10","rawTime":"12:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001325","serviceId":"000003900002202700001325"},{"time":"12:40","rawTime":"12:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000013","serviceId":"000003900002204900000013"},{"time":"12:52","rawTime":"12:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001309","serviceId":"000003900002202700001309"},{"time":"14:10","rawTime":"14:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001315","serviceId":"000003900002202700001315"},{"time":"14:20","rawTime":"14:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001335","serviceId":"000003900002202600001335"},{"time":"15:05","rawTime":"15:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000016","serviceId":"000003900002204800000016"},{"time":"15:10","rawTime":"15:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001326","serviceId":"000003900002202700001326"},{"time":"15:40","rawTime":"15:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000014","serviceId":"000003900002204900000014"},{"time":"17:10","rawTime":"17:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001316","serviceId":"000003900002202700001316"},{"time":"18:05","rawTime":"18:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000017","serviceId":"000003900002204800000017"},{"time":"18:40","rawTime":"18:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000015","serviceId":"000003900002204900000015"},{"time":"19:10","rawTime":"19:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001311","serviceId":"000003900002202700001311"},{"time":"20:10","rawTime":"20:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001317","serviceId":"000003900002202700001317"},{"time":"20:20","rawTime":"20:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001337","serviceId":"000003900002202600001337"},{"time":"21:05","rawTime":"21:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000018","serviceId":"000003900002204800000018"},{"time":"21:10","rawTime":"21:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001328","serviceId":"000003900002202700001328"},{"time":"21:40","rawTime":"21:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000016","serviceId":"000003900002204900000016"},{"time":"21:52","rawTime":"21:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001312","serviceId":"000003900002202700001312"},{"time":"22:52","rawTime":"22:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001322","serviceId":"000003900002202700001322"},{"time":"23:52","rawTime":"23:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001340","serviceId":"000003900002202700001340"}]},{"date":"2026-07-24","weekday":"Friday","departures":[{"time":"02:40","rawTime":"02:40:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001323","serviceId":"000003900002202700001323"},{"time":"09:05","rawTime":"09:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000014","serviceId":"000003900002204800000014"},{"time":"09:10","rawTime":"09:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001324","serviceId":"000003900002202700001324"},{"time":"09:40","rawTime":"09:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000012","serviceId":"000003900002204900000012"},{"time":"10:10","rawTime":"10:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001308","serviceId":"000003900002202700001308"},{"time":"10:52","rawTime":"10:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001314","serviceId":"000003900002202700001314"},{"time":"12:05","rawTime":"12:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000015","serviceId":"000003900002204800000015"},{"time":"12:10","rawTime":"12:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001325","serviceId":"000003900002202700001325"},{"time":"12:40","rawTime":"12:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000013","serviceId":"000003900002204900000013"},{"time":"12:52","rawTime":"12:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001309","serviceId":"000003900002202700001309"},{"time":"14:10","rawTime":"14:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001315","serviceId":"000003900002202700001315"},{"time":"14:20","rawTime":"14:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001335","serviceId":"000003900002202600001335"},{"time":"15:05","rawTime":"15:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000016","serviceId":"000003900002204800000016"},{"time":"15:10","rawTime":"15:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001326","serviceId":"000003900002202700001326"},{"time":"15:40","rawTime":"15:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000014","serviceId":"000003900002204900000014"},{"time":"17:10","rawTime":"17:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001316","serviceId":"000003900002202700001316"},{"time":"18:05","rawTime":"18:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000017","serviceId":"000003900002204800000017"},{"time":"18:40","rawTime":"18:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000015","serviceId":"000003900002204900000015"},{"time":"19:10","rawTime":"19:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001311","serviceId":"000003900002202700001311"},{"time":"20:10","rawTime":"20:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001317","serviceId":"000003900002202700001317"},{"time":"20:20","rawTime":"20:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001337","serviceId":"000003900002202600001337"},{"time":"21:05","rawTime":"21:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000018","serviceId":"000003900002204800000018"},{"time":"21:10","rawTime":"21:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001328","serviceId":"000003900002202700001328"},{"time":"21:40","rawTime":"21:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000016","serviceId":"000003900002204900000016"},{"time":"21:52","rawTime":"21:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001312","serviceId":"000003900002202700001312"},{"time":"22:00","rawTime":"22:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001001","serviceId":"000003900002203300001001"},{"time":"22:52","rawTime":"22:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001322","serviceId":"000003900002202700001322"},{"time":"22:55","rawTime":"22:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001001","serviceId":"000003900002203200001001"},{"time":"23:00","rawTime":"23:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001008","serviceId":"000003900002203300001008"},{"time":"23:52","rawTime":"23:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001340","serviceId":"000003900002202700001340"},{"time":"23:55","rawTime":"23:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001002","serviceId":"000003900002203200001002"},{"time":"00:00","rawTime":"24:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001003","serviceId":"000003900002203300001003"}]},{"date":"2026-07-25","weekday":"Saturday","departures":[{"time":"00:55","rawTime":"00:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001003","serviceId":"000003900002203200001003"},{"time":"01:00","rawTime":"01:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001004","serviceId":"000003900002203300001004"},{"time":"01:55","rawTime":"01:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001004","serviceId":"000003900002203200001004"},{"time":"02:00","rawTime":"02:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001005","serviceId":"000003900002203300001005"},{"time":"02:40","rawTime":"02:40:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001323","serviceId":"000003900002202700001323"},{"time":"03:00","rawTime":"03:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001006","serviceId":"000003900002203300001006"},{"time":"04:55","rawTime":"04:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001005","serviceId":"000003900002203200001005"},{"time":"05:55","rawTime":"05:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001006","serviceId":"000003900002203200001006"},{"time":"06:55","rawTime":"06:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001007","serviceId":"000003900002203200001007"},{"time":"08:10","rawTime":"08:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001401","serviceId":"000003900002202700001401"},{"time":"08:50","rawTime":"08:50:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001421","serviceId":"000003900002202600001421"},{"time":"09:35","rawTime":"09:35:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000106","serviceId":"000003900002204800000106"},{"time":"10:52","rawTime":"10:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001406","serviceId":"000003900002202700001406"},{"time":"12:10","rawTime":"12:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001402","serviceId":"000003900002202700001402"},{"time":"12:52","rawTime":"12:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001412","serviceId":"000003900002202700001412"},{"time":"14:10","rawTime":"14:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001417","serviceId":"000003900002202700001417"},{"time":"14:10","rawTime":"14:10:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000108","serviceId":"000003900002204900000108"},{"time":"15:10","rawTime":"15:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001407","serviceId":"000003900002202700001407"},{"time":"15:52","rawTime":"15:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001403","serviceId":"000003900002202700001403"},{"time":"16:35","rawTime":"16:35:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000109","serviceId":"000003900002204800000109"},{"time":"17:10","rawTime":"17:10:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000109","serviceId":"000003900002204900000109"},{"time":"19:10","rawTime":"19:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001408","serviceId":"000003900002202700001408"},{"time":"20:05","rawTime":"20:05:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Ida","routeLongName":"S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos","headsign":"Cabo de Palos","directionId":"0","tripId":"000003900002204800000110","serviceId":"000003900002204800000110"},{"time":"20:10","rawTime":"20:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001404","serviceId":"000003900002202700001404"},{"time":"20:20","rawTime":"20:20:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43i Puebl","routeLongName":"L43 Cartagena-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"0","tripId":"000003900002202600001418","serviceId":"000003900002202600001418"},{"time":"20:40","rawTime":"20:40:00","stopId":"0002243300000001","stopName":"Camping Caravanning","routeShortName":"ALSA - R-6 Vta","routeLongName":"Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar","headsign":"E autobuses S.Pedro del Pinat","directionId":"1","tripId":"000003900002204900000110","serviceId":"000003900002204900000110"},{"time":"21:10","rawTime":"21:10:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001414","serviceId":"000003900002202700001414"},{"time":"21:52","rawTime":"21:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001419","serviceId":"000003900002202700001419"},{"time":"22:00","rawTime":"22:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001001","serviceId":"000003900002203300001001"},{"time":"22:52","rawTime":"22:52:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L43v Puebl","routeLongName":"L43 La Manga-Cartagena","headsign":"Cartagena","directionId":"0","tripId":"000003900002202700001409","serviceId":"000003900002202700001409"},{"time":"22:55","rawTime":"22:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001001","serviceId":"000003900002203200001001"},{"time":"23:00","rawTime":"23:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001008","serviceId":"000003900002203300001008"},{"time":"23:55","rawTime":"23:55:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23i","routeLongName":"L23 ida La Manga-Santiago de la Ribera","headsign":"Los Urrutias","directionId":"0","tripId":"000003900002203200001002","serviceId":"000003900002203200001002"},{"time":"00:00","rawTime":"24:00:00","stopId":"0000757000000001","stopName":"Caravaning Camping","routeShortName":"ALSA - L23v","routeLongName":"L23 vta Santiago de la Ribera-La Manga","headsign":"La Manga (Pedruchillo) -Cart","directionId":"1","tripId":"000003900002203300001003","serviceId":"000003900002203300001003"}]}]};
 
+
+const FUEL_I18N = {
+  da: {
+    button:'Benzin', title:'Vis senest indberettede priser på Benzin 95 E5', heading:'Benzin 95 E5',
+    loading:'Henter de senest indberettede benzinpriser…', updated:'Hentet', sourceDate:'Kildedato',
+    initial:'Priserne indlæses, når fanen åbnes.', error:'Priserne kunne ikke hentes direkte. Kontrollér internetforbindelsen og prøv igen.',
+    cors:'Den officielle tjeneste afviste den direkte browserforespørgsel. Funktionen kan kræve datahentning gennem Android-appen.',
+    radius:'Radius', count:'Antal', all:'Alle', home:'Villas Caravaning', myLocation:'Min position',
+    locating:'Finder din position…', geoError:'Din position kunne ikke hentes. Villas Caravaning bruges fortsat.',
+    origin:'Udgangspunkt', nearest:'Nærmeste', cheapest:'Billigste', refresh:'Opdater',
+    found:'stationer med en gyldig pris inden for', none:'Ingen stationer med en gyldig pris blev fundet inden for den valgte radius.',
+    away:'væk', perLitre:'pr. liter', hours:'Åbningstid', route:'Åbn rute',
+    source:'Kilde: Ministerio de Industria y Turismo – officiel REST-tjeneste.', note:'Priserne er vejledende og svarer til de senest indberettede oplysninger.',
+    official:'Officiel API'
+  },
+  es: {
+    button:'Gasolina', title:'Ver los últimos precios comunicados de Gasolina 95 E5', heading:'Gasolina 95 E5',
+    loading:'Cargando los últimos precios comunicados…', updated:'Consultado', sourceDate:'Fecha de la fuente',
+    initial:'Los precios se cargan al abrir la pestaña.', error:'No se pudieron cargar los precios. Compruebe la conexión e inténtelo de nuevo.',
+    cors:'El servicio oficial rechazó la consulta directa del navegador. La función puede requerir la descarga mediante la aplicación Android.',
+    radius:'Radio', count:'Cantidad', all:'Todas', home:'Villas Caravaning', myLocation:'Mi ubicación',
+    locating:'Buscando su ubicación…', geoError:'No se pudo obtener su ubicación. Se sigue usando Villas Caravaning.',
+    origin:'Origen', nearest:'Más cercanas', cheapest:'Más baratas', refresh:'Actualizar',
+    found:'estaciones con precio válido dentro de', none:'No se encontraron estaciones con un precio válido dentro del radio seleccionado.',
+    away:'de distancia', perLitre:'por litro', hours:'Horario', route:'Abrir ruta',
+    source:'Fuente: Ministerio de Industria y Turismo – servicio REST oficial.', note:'Los precios son orientativos y corresponden a los últimos datos comunicados.',
+    official:'API oficial'
+  },
+  de: {
+    button:'Benzin', title:'Zuletzt gemeldete Preise für Super 95 E5 anzeigen', heading:'Super 95 E5',
+    loading:'Zuletzt gemeldete Benzinpreise werden geladen…', updated:'Abgerufen', sourceDate:'Quelldatum',
+    initial:'Die Preise werden beim Öffnen geladen.', error:'Die Preise konnten nicht geladen werden. Internetverbindung prüfen und erneut versuchen.',
+    cors:'Der offizielle Dienst hat die direkte Browseranfrage abgelehnt. Die Funktion muss möglicherweise über die Android-App laden.',
+    radius:'Radius', count:'Anzahl', all:'Alle', home:'Villas Caravaning', myLocation:'Mein Standort',
+    locating:'Standort wird ermittelt…', geoError:'Der Standort konnte nicht ermittelt werden. Villas Caravaning wird weiter verwendet.',
+    origin:'Ausgangspunkt', nearest:'Nächste', cheapest:'Günstigste', refresh:'Aktualisieren',
+    found:'Tankstellen mit gültigem Preis im Umkreis von', none:'Im gewählten Radius wurden keine Tankstellen mit gültigem Preis gefunden.',
+    away:'entfernt', perLitre:'pro Liter', hours:'Öffnungszeiten', route:'Route öffnen',
+    source:'Quelle: Ministerio de Industria y Turismo – offizieller REST-Dienst.', note:'Die Preise sind unverbindlich und entsprechen den zuletzt gemeldeten Daten.',
+    official:'Offizielle API'
+  },
+  en: {
+    button:'Petrol', title:'Show the latest reported Petrol 95 E5 prices', heading:'Petrol 95 E5',
+    loading:'Loading the latest reported petrol prices…', updated:'Retrieved', sourceDate:'Source date',
+    initial:'Prices load when the tab is opened.', error:'Prices could not be loaded. Check the internet connection and try again.',
+    cors:'The official service rejected the direct browser request. The function may need to fetch through the Android app.',
+    radius:'Radius', count:'Number', all:'All', home:'Villas Caravaning', myLocation:'My location',
+    locating:'Finding your location…', geoError:'Your location could not be obtained. Villas Caravaning is still used.',
+    origin:'Starting point', nearest:'Nearest', cheapest:'Cheapest', refresh:'Refresh',
+    found:'stations with a valid price within', none:'No stations with a valid price were found within the selected radius.',
+    away:'away', perLitre:'per litre', hours:'Opening hours', route:'Open route',
+    source:'Source: Ministerio de Industria y Turismo – official REST service.', note:'Prices are indicative and reflect the latest reported information.',
+    official:'Official API'
+  },
+  fr: {
+    button:'Essence', title:'Afficher les derniers prix déclarés de l’essence 95 E5', heading:'Essence 95 E5',
+    loading:'Chargement des derniers prix déclarés…', updated:'Consulté', sourceDate:'Date de la source',
+    initial:'Les prix sont chargés à l’ouverture de l’onglet.', error:'Impossible de charger les prix. Vérifiez la connexion et réessayez.',
+    cors:'Le service officiel a refusé la requête directe du navigateur. Le chargement peut devoir passer par l’application Android.',
+    radius:'Rayon', count:'Nombre', all:'Toutes', home:'Villas Caravaning', myLocation:'Ma position',
+    locating:'Recherche de votre position…', geoError:'Votre position n’a pas pu être obtenue. Villas Caravaning reste utilisée.',
+    origin:'Point de départ', nearest:'Plus proches', cheapest:'Moins chères', refresh:'Actualiser',
+    found:'stations avec un prix valide dans un rayon de', none:'Aucune station avec un prix valide n’a été trouvée dans le rayon sélectionné.',
+    away:'de distance', perLitre:'par litre', hours:'Horaires', route:'Ouvrir l’itinéraire',
+    source:'Source : Ministerio de Industria y Turismo – service REST officiel.', note:'Les prix sont indicatifs et correspondent aux dernières données déclarées.',
+    official:'API officielle'
+  },
+  it: {
+    button:'Benzina', title:'Mostra gli ultimi prezzi comunicati della Benzina 95 E5', heading:'Benzina 95 E5',
+    loading:'Caricamento degli ultimi prezzi comunicati…', updated:'Consultato', sourceDate:'Data della fonte',
+    initial:'I prezzi vengono caricati all’apertura della scheda.', error:'Impossibile caricare i prezzi. Controllare la connessione e riprovare.',
+    cors:'Il servizio ufficiale ha rifiutato la richiesta diretta del browser. La funzione potrebbe dover caricare tramite l’app Android.',
+    radius:'Raggio', count:'Numero', all:'Tutte', home:'Villas Caravaning', myLocation:'La mia posizione',
+    locating:'Ricerca della posizione…', geoError:'Impossibile ottenere la posizione. Viene ancora usata Villas Caravaning.',
+    origin:'Punto di partenza', nearest:'Più vicine', cheapest:'Più economiche', refresh:'Aggiorna',
+    found:'stazioni con un prezzo valido entro', none:'Nessuna stazione con un prezzo valido trovata nel raggio selezionato.',
+    away:'di distanza', perLitre:'al litro', hours:'Orari', route:'Apri percorso',
+    source:'Fonte: Ministerio de Industria y Turismo – servizio REST ufficiale.', note:'I prezzi sono indicativi e corrispondono agli ultimi dati comunicati.',
+    official:'API ufficiale'
+  }
+};
+
+function getFuelText(lang = uiLanguage) {
+  return FUEL_I18N[lang] || FUEL_I18N.en;
+}
+
 function getBusText(lang = uiLanguage) {
   return BUS_I18N[lang] || BUS_I18N.en;
 }
@@ -3795,6 +3928,7 @@ const AERIAL_SOURCE_NOTES = {
 function noteForActiveLayer(lang = uiLanguage, layer = activeLayer) {
   const t = getChrome(lang);
   if (layer === 'bus') return '';
+  if (layer === 'fuel') return '';
   if (layer === 'beach') return '';
   if (layer === 'aerial') return '';
   return t.note;
@@ -3828,6 +3962,7 @@ function applyInterfaceLanguage(lang, options = {}) {
   const aerialLayerBtn = document.getElementById('aerialLayerBtn');
   const beachStatusBtn = document.getElementById('beachStatusBtn');
   const busPlanBtn = document.getElementById('busPlanBtn');
+  const fuelBtn = document.getElementById('fuelBtn');
   const mapNote = document.getElementById('mapNote');
   const copyrightNote = document.getElementById('copyrightNote');
   const lt = LAYER_UI[uiLanguage] || LAYER_UI.en;
@@ -3840,7 +3975,7 @@ function applyInterfaceLanguage(lang, options = {}) {
   const reportErrorBtn = document.getElementById('reportErrorBtn');
   if (reportErrorBtn) reportErrorBtn.textContent = t.reportButton || reportErrorBtn.textContent || '⚠ Indberet fejl';
   if (languageHint) languageHint.textContent = t.languageHint;
-  if (mapTitle) mapTitle.textContent = activeLayer === 'bus' ? getBusText(uiLanguage).button : (activeLayer === 'beach' ? (t.beachStatusButton || 'Strand') : (activeLayer === 'aerial' ? lt.aerialTitle : lt.siteTitle));
+  if (mapTitle) mapTitle.textContent = activeLayer === 'fuel' ? getFuelText(uiLanguage).button : (activeLayer === 'bus' ? getBusText(uiLanguage).button : (activeLayer === 'beach' ? (t.beachStatusButton || 'Strand') : (activeLayer === 'aerial' ? lt.aerialTitle : lt.siteTitle)));
   if (siteLayerBtn) siteLayerBtn.textContent = lt.site;
   if (aerialLayerBtn) aerialLayerBtn.textContent = lt.aerial;
   if (beachStatusBtn) {
@@ -3857,9 +3992,19 @@ function applyInterfaceLanguage(lang, options = {}) {
     busPlanBtn.title = bt.title;
     busPlanBtn.setAttribute('aria-label', bt.title);
   }
+  const ft = getFuelText(uiLanguage);
+  if (fuelBtn) {
+    fuelBtn.textContent = ft.button;
+    fuelBtn.title = ft.title;
+    fuelBtn.setAttribute('aria-label', ft.title);
+  }
+  updateFuelLanguage();
   updateBeachStatusUi();
-  if (activeBeachSource === 'find' && beachStatusFrame && activeLayer === 'beach') {
-    setBeachFrameSource('find', true);
+  if (activeBeachSource === 'find' && beachStatusFrame) {
+    const source = getBeachStatusSource('find');
+    if (activeLayer === 'beach' && beachStatusFrame.getAttribute('src') !== source.url) {
+      beachStatusFrame.setAttribute('src', source.url);
+    }
   }
   updateBusPlanLanguage();
   const cu = CALIBRATION_UI[uiLanguage] || CALIBRATION_UI.en;
@@ -3920,6 +4065,23 @@ const busPlanDays = document.getElementById('busPlanDays');
 const busPlanStatus = document.getElementById('busPlanStatus');
 const busPlanDepartures = document.getElementById('busPlanDepartures');
 const busPlanFooter = document.getElementById('busPlanFooter');
+const fuelBtn = document.getElementById('fuelBtn');
+const fuelPane = document.getElementById('fuelPane');
+const fuelHeading = document.getElementById('fuelHeading');
+const fuelUpdated = document.getElementById('fuelUpdated');
+const fuelRadiusLabel = document.getElementById('fuelRadiusLabel');
+const fuelCountLabel = document.getElementById('fuelCountLabel');
+const fuelRadius = document.getElementById('fuelRadius');
+const fuelCount = document.getElementById('fuelCount');
+const fuelHomeBtn = document.getElementById('fuelHomeBtn');
+const fuelGeoBtn = document.getElementById('fuelGeoBtn');
+const fuelStatus = document.getElementById('fuelStatus');
+const fuelLocation = document.getElementById('fuelLocation');
+const fuelSortDistance = document.getElementById('fuelSortDistance');
+const fuelSortPrice = document.getElementById('fuelSortPrice');
+const fuelRefresh = document.getElementById('fuelRefresh');
+const fuelList = document.getElementById('fuelList');
+const fuelFooter = document.getElementById('fuelFooter');
 const pnoaAttribution = document.getElementById('pnoaAttribution');
 const zoomOut = document.getElementById('zoomOut');
 const zoomIn = document.getElementById('zoomIn');
@@ -3958,7 +4120,7 @@ const BEACH_DEFAULT_VIEWS = {
   // CSS-zoom/scroll positions in the official external map. The Cartagena page is cross-domain,
   // so we cannot call its internal map API directly. Derfor bruges nu kun en mild startzoom,
   // så kortet åbner længere ude og brugeren selv kan zoome ind.
-  cartagena: { zoom: 1, x: 0, y: 0 },
+  cartagena: { zoom: 1.10, x: 0.50, y: 0.43 },
   nayade: { zoom: 1, x: 0, y: 0 },
   find: { zoom: 1, x: 0, y: 0 }
 };
@@ -3967,11 +4129,17 @@ let activeLayer = 'site';
 let activeBeachSource = 'cartagena';
 let beachZoom = 1;
 let pendingBeachInitialView = false;
-let beachFrameRequestId = 0;
 let busPlanData = null;
 let selectedBusDate = null;
 let busPlanLoading = false;
 let busPlanUsingFallback = false;
+let fuelRawRows = [];
+let fuelStations = [];
+let fuelLoading = false;
+let fuelSortMode = 'distance';
+let fuelLastLoadedAt = 0;
+let fuelLastSourceDate = '';
+let fuelCenter = { lat: 37.62805, lon: -0.74430, name: 'Villas Caravaning' };
 let active = null;
 let currentResult = null;
 let siteMarker = null;
@@ -4103,9 +4271,7 @@ window.vcHandleOrientationChange = function() {
 
 function hideCatastroInfo() {
   catastroRequestToken += 1;
-  catastroExpandedParcelKey = '';
-  if (catastroCard) catastroCard.classList.remove('visible', 'compact');
-  if (catastroNote) catastroNote.style.display = '';
+  if (catastroCard) catastroCard.classList.remove('visible');
 }
 
 function formatCatastroPercent(value, lang) {
@@ -4147,57 +4313,19 @@ function renderCatastroRows(rows, note, lang = uiLanguage, parcelKey = '') {
     catastroGrid.innerHTML = rows.filter(r => r && r.value !== undefined && r.value !== null && String(r.value).trim() !== '').map(r => `
       <div class="catastro-item"><div class="catastro-label">${escapeHtml(r.label)}</div><div class="catastro-value">${r.html ? r.value : escapeHtml(r.value)}</div></div>
     `).join('');
-    const toggleBtn = catastroGrid.querySelector('[data-catastro-toggle="1"]');
-    if (toggleBtn && parcelKey) toggleBtn.addEventListener('click', () => toggleCatastroInfo(parcelKey, uiLanguage));
   }
-  if (catastroNote) {
-    const finalNote = note === '' ? '' : (note || t.note);
-    catastroNote.textContent = finalNote;
-    catastroNote.style.display = finalNote ? '' : 'none';
-  }
-  if (catastroCard) catastroCard.classList.remove('compact');
+  if (catastroNote) catastroNote.textContent = note || t.note;
   if (catastroCard) catastroCard.classList.add('visible');
-}
-
-function renderCatastroReferenceOnly(data, lang = uiLanguage, parcelKey = '') {
-  const t = CATASTRO_TEXT[lang] || CATASTRO_TEXT.en;
-  const reference = data && data.reference ? String(data.reference).trim() : '';
-  if (!reference) {
-    renderCatastroRows(rowsFromCatastroData(data || {}, lang), t.note, lang, parcelKey);
-    return;
-  }
-  if (catastroTitle) catastroTitle.textContent = t.title;
-  if (catastroBadge) catastroBadge.textContent = t.badge(catastroDisplayParcelKey(parcelKey));
-  if (catastroGrid) {
-    catastroGrid.innerHTML = `
-      <div class="catastro-item">
-        <div class="catastro-label">${escapeHtml(t.labels.reference)}</div>
-        <div class="catastro-value"><button type="button" class="catastro-ref-button" data-catastro-toggle="1">${escapeHtml(reference)}</button></div>
-      </div>
-    `;
-    const btn = catastroGrid.querySelector('[data-catastro-toggle="1"]');
-    if (btn) btn.addEventListener('click', () => toggleCatastroInfo(parcelKey, uiLanguage));
-  }
-  if (catastroNote) {
-    catastroNote.textContent = '';
-    catastroNote.style.display = 'none';
-  }
-  if (catastroCard) catastroCard.classList.add('visible', 'compact');
-}
-
-function renderCatastroDataByMode(data, lang = uiLanguage, parcelKey = '') {
-  if (catastroExpandedParcelKey === parcelKey) {
-    renderCatastroRows(rowsFromCatastroData(data, lang), (CATASTRO_TEXT[lang] || CATASTRO_TEXT.en).note, lang, parcelKey);
-  } else {
-    renderCatastroReferenceOnly(data, lang, parcelKey);
-  }
 }
 
 function renderCatastroLoading(parcelKey, lang = uiLanguage) {
   const t = CATASTRO_TEXT[lang] || CATASTRO_TEXT.en;
+  const displayKey = catastroDisplayParcelKey(parcelKey);
+  const geo = getCatastroGeoForParcel(displayKey);
   const rows = [];
+  if (geo) rows.push({label:t.labels.coordinates, value:`${geo.lat.toFixed(6)}, ${geo.lng.toFixed(6)}`});
   rows.push({label:t.labels.reference, value:t.loading});
-  renderCatastroRows(rows, '', lang, parcelKey);
+  renderCatastroRows(rows, t.note, lang, parcelKey);
 }
 
 function findFirstObject(root, predicate) {
@@ -4304,12 +4432,7 @@ function parseCatastroDetail(data, reference, coords) {
 function rowsFromCatastroData(data, lang = uiLanguage) {
   const t = CATASTRO_TEXT[lang] || CATASTRO_TEXT.en;
   const rows = [];
-  const reference = data && data.reference ? String(data.reference).trim() : '';
-  rows.push({
-    label:t.labels.reference,
-    value: reference ? `<button type="button" class="catastro-ref-button" data-catastro-toggle="1">${escapeHtml(reference)}</button>` : '',
-    html: Boolean(reference)
-  });
+  rows.push({label:t.labels.reference, value:data.reference});
   rows.push({label:t.labels.propertyClass, value:translateCatastroClass(data.propertyClass, t)});
   rows.push({label:t.labels.mainUse, value:translateCatastroUse(data.mainUse, t)});
   rows.push({label:t.labels.builtAreaM2, value:data.builtAreaM2 ? `${cleanCatastroValue(data.builtAreaM2)} m²` : ''});
@@ -4372,11 +4495,11 @@ async function loadCatastroInfo(parcelKey, lang = uiLanguage) {
   const fallback = staticCatastroFallbackData(parcelKey, coords);
   const t0 = CATASTRO_TEXT[lang] || CATASTRO_TEXT.en;
 
-  // Indledningsvis vises kun referencia catastral.
-  // Alle øvrige oplysninger vises først, når brugeren trykker på referenciaen.
+  // Den faste referencia catastral fra den tidligere, stabile funktion vises med det samme.
+  // Hvis Catastros offentlige opslag virker, opdateres boksen bagefter med flere oplysninger.
   if (fallback) {
     catastroLookupCache.set(parcelKey, fallback);
-    renderCatastroDataByMode(fallback, lang, parcelKey);
+    renderCatastroRows(rowsFromCatastroData(fallback, lang), t0.note, lang, parcelKey);
   } else {
     renderCatastroLoading(parcelKey, lang);
   }
@@ -4389,49 +4512,23 @@ async function loadCatastroInfo(parcelKey, lang = uiLanguage) {
     const complete = {...(fallback || {}), ...detail, reference: detail.reference || reference, catastroUrl: catastroOfficialUrl(detail.reference || reference)};
     catastroLookupCache.set(parcelKey, complete);
     if (token !== catastroRequestToken) return;
-    renderCatastroDataByMode(complete, uiLanguage, parcelKey);
+    renderCatastroRows(rowsFromCatastroData(complete, uiLanguage), (CATASTRO_TEXT[uiLanguage] || CATASTRO_TEXT.en).note, uiLanguage, parcelKey);
   } catch (err) {
     if (fallback) return;
     const t = CATASTRO_TEXT[uiLanguage] || CATASTRO_TEXT.en;
     if (token !== catastroRequestToken) return;
     const rows = [];
+    if (coords) rows.push({label:t.labels.coordinates, value:`${coords.lat.toFixed(6)}, ${coords.lng.toFixed(6)}`});
     rows.push({label:t.labels.reference, value: err && err.message === 'NO_REFCAT' ? t.noReference : t.offline});
     renderCatastroRows(rows, t.note, uiLanguage, parcelKey);
   }
-}
-
-function toggleCatastroInfo(parcelKey, lang = uiLanguage) {
-  if (!parcelKey) return;
-  const cached = catastroLookupCache.get(parcelKey);
-
-  if (catastroExpandedParcelKey === parcelKey) {
-    catastroExpandedParcelKey = '';
-    if (cached) {
-      renderCatastroReferenceOnly(cached, lang, parcelKey);
-      return;
-    }
-    loadCatastroInfo(parcelKey, lang);
-    return;
-  }
-
-  catastroExpandedParcelKey = parcelKey;
-  if (cached) {
-    renderCatastroRows(rowsFromCatastroData(cached, lang), (CATASTRO_TEXT[lang] || CATASTRO_TEXT.en).note, lang, parcelKey);
-    return;
-  }
-  loadCatastroInfo(parcelKey, lang);
-}
-
-function expandCatastroInfo(parcelKey, lang = uiLanguage) {
-  if (!parcelKey) return;
-  if (catastroExpandedParcelKey !== parcelKey) toggleCatastroInfo(parcelKey, lang);
 }
 
 function showCatastroInfo(parcelKey, lang = uiLanguage) {
   if (!parcelKey) { hideCatastroInfo(); return; }
   const cached = catastroLookupCache.get(parcelKey);
   if (cached) {
-    renderCatastroDataByMode(cached, lang, parcelKey);
+    renderCatastroRows(rowsFromCatastroData(cached, lang), (CATASTRO_TEXT[lang] || CATASTRO_TEXT.en).note, lang, parcelKey);
     return;
   }
   loadCatastroInfo(parcelKey, lang);
@@ -4535,30 +4632,14 @@ function clampBeachZoom(value) {
 
 function applyBeachZoom() {
   if (!beachFrameViewport || !beachFrameCanvas || !beachStatusFrame) return;
-
-  // Cartagena-siden er en ekstern, responsiv side. Native iframe-visning forhindrer,
-  // at toppen eller bunden af dens indhold bliver beskåret efter en skærmændring.
-  if (activeBeachSource === 'cartagena') {
-    beachZoom = 1;
-    beachFrameCanvas.style.width = '100%';
-    beachFrameCanvas.style.height = '100%';
-    beachStatusFrame.style.width = '100%';
-    beachStatusFrame.style.height = '100%';
-    beachStatusFrame.style.transform = 'none';
-    if (beachZoomReset) beachZoomReset.textContent = '100%';
-    if (beachFocusVillas) beachFocusVillas.classList.add('hidden');
-    return;
-  }
-
   beachZoom = clampBeachZoom(beachZoom);
-  const canvasScale = Math.max(1, beachZoom);
-  beachFrameCanvas.style.width = `${canvasScale * 100}%`;
-  beachFrameCanvas.style.height = `${canvasScale * 100}%`;
+  beachFrameCanvas.style.width = `${beachZoom * 100}%`;
+  beachFrameCanvas.style.height = `${beachZoom * 100}%`;
   beachStatusFrame.style.width = `${100 / beachZoom}%`;
   beachStatusFrame.style.height = `${100 / beachZoom}%`;
   beachStatusFrame.style.transform = `scale(${beachZoom})`;
   if (beachZoomReset) beachZoomReset.textContent = `${Math.round(beachZoom * 100)}%`;
-  if (beachFocusVillas) beachFocusVillas.classList.add('hidden');
+  if (beachFocusVillas) beachFocusVillas.classList.toggle('hidden', activeBeachSource !== 'cartagena');
 }
 
 function setBeachZoom(value, keepCenter = true) {
@@ -4584,16 +4665,7 @@ function setBeachZoom(value, keepCenter = true) {
 }
 
 function focusBeachView(sourceKey = activeBeachSource) {
-  if (sourceKey === 'cartagena') {
-    beachZoom = 1;
-    applyBeachZoom();
-    requestAnimationFrame(() => {
-      if (beachFrameViewport) beachFrameViewport.scrollTo({ left: 0, top: 0, behavior: 'auto' });
-    });
-    return;
-  }
-
-  const view = BEACH_DEFAULT_VIEWS[sourceKey] || BEACH_DEFAULT_VIEWS.nayade;
+  const view = BEACH_DEFAULT_VIEWS[sourceKey] || BEACH_DEFAULT_VIEWS.cartagena;
   const phoneBoost = 0;
   beachZoom = clampBeachZoom((view.zoom || 1) + phoneBoost);
   applyBeachZoom();
@@ -4635,39 +4707,12 @@ function getBeachStatusSource(key = activeBeachSource) {
   return BEACH_STATUS_SOURCES[key] || BEACH_STATUS_SOURCES.cartagena;
 }
 
-function setBeachFrameSource(sourceKey = activeBeachSource, forceReload = false) {
-  if (!beachStatusFrame) return;
-  const source = getBeachStatusSource(sourceKey);
-  const currentCleanUrl = beachStatusFrame.dataset.cleanSrc || '';
-  const currentSrc = beachStatusFrame.getAttribute('src') || '';
-
-  if (!forceReload && currentCleanUrl === source.url && currentSrc && currentSrc !== 'about:blank') return;
-
-  const requestId = ++beachFrameRequestId;
-  beachStatusFrame.dataset.cleanSrc = source.url;
-  beachStatusFrame.dataset.sourceKey = sourceKey;
-
-  // En kort blank indlæsning nulstiller den eksterne sides egen scroll- og layouttilstand.
-  // Det er nødvendigt i Android WebView, når iframe-vinduet først bliver gjort større.
-  if (forceReload && currentSrc) {
-    beachStatusFrame.setAttribute('src', 'about:blank');
-    setTimeout(() => {
-      if (requestId !== beachFrameRequestId) return;
-      if (activeLayer !== 'beach' || activeBeachSource !== sourceKey) return;
-      beachStatusFrame.setAttribute('src', source.url);
-    }, 60);
-  } else {
-    beachStatusFrame.setAttribute('src', source.url);
-  }
-}
-
 function updateBeachStatusUi() {
   const t = getChrome(uiLanguage);
   const isCartagena = activeBeachSource === 'cartagena';
   const isNayade = activeBeachSource === 'nayade';
   const isFindBeach = activeBeachSource === 'find';
   const source = getBeachStatusSource();
-  document.body.classList.toggle('beach-native-view', activeLayer === 'beach' && isCartagena);
   if (beachStatusTabs) beachStatusTabs.setAttribute('aria-label', t.beachStatusTabsAria || 'Vælg strandinformation');
   if (beachCartagenaBtn) {
     beachCartagenaBtn.textContent = t.beachStatusCartagena || 'Strand Status';
@@ -4718,11 +4763,12 @@ function setBeachStatusSource(key) {
   if (activeBeachSource === 'find') {
     beachFindReloadNonce = Date.now();
   }
+  const source = getBeachStatusSource();
   updateBeachStatusUi();
-  if (activeLayer === 'beach') {
-    setBeachFrameSource(activeBeachSource, true);
-    scheduleBeachInitialView(activeBeachSource);
+  if (beachStatusFrame && activeLayer === 'beach' && beachStatusFrame.getAttribute('src') !== source.url) {
+    beachStatusFrame.setAttribute('src', source.url);
   }
+  if (activeLayer === 'beach') scheduleBeachInitialView(activeBeachSource);
 }
 
 
@@ -4937,31 +4983,273 @@ async function loadBusPlan(force = false) {
   }
 }
 
+
+const FUEL_API_URLS = [
+  'https://energia.serviciosmin.gob.es/ServiciosRestCarburantes/PreciosCarburantes/EstacionesTerrestres/FiltroProvinciaProducto/30/1',
+  'https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/FiltroProvinciaProducto/30/1'
+];
+const FUEL_API_HELP_URL = 'https://energia.serviciosmin.gob.es/ServiciosRestCarburantes/PreciosCarburantes/help';
+const FUEL_REFRESH_MS = 5 * 60 * 1000;
+
+function fuelNumber(value) {
+  if (value === null || value === undefined) return NaN;
+  const raw = String(value).trim().replace(/\s/g, '');
+  if (!raw) return NaN;
+  if (raw.includes(',')) return Number(raw.replace(/\./g, '').replace(',', '.'));
+  return Number(raw);
+}
+
+function fuelCoordinate(row, names) {
+  for (const name of names) {
+    if (Object.prototype.hasOwnProperty.call(row, name)) {
+      const value = fuelNumber(row[name]);
+      if (Number.isFinite(value)) return value;
+    }
+  }
+  return NaN;
+}
+
+function fuelDistanceKm(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const rad = value => value * Math.PI / 180;
+  const dLat = rad(lat2 - lat1);
+  const dLon = rad(lon2 - lon1);
+  const a = Math.sin(dLat / 2) ** 2 +
+    Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(dLon / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(a));
+}
+
+function fuelSetStatus(message, type = '') {
+  if (!fuelStatus) return;
+  fuelStatus.className = 'fuel-status' + (type ? ` ${type}` : '');
+  fuelStatus.innerHTML = message;
+}
+
+function fuelExtractRows(payload) {
+  if (Array.isArray(payload)) return payload;
+  if (Array.isArray(payload?.ListaEESSPrecio)) return payload.ListaEESSPrecio;
+  if (Array.isArray(payload?.listaEESSPrecio)) return payload.listaEESSPrecio;
+  return [];
+}
+
+function fuelRecalculate() {
+  const radius = Number(fuelRadius?.value || 25);
+  fuelStations = fuelRawRows.map(row => {
+    const lat = fuelCoordinate(row, ['Latitud', 'latitud']);
+    const lon = fuelCoordinate(row, ['Longitud (WGS84)', 'Longitud_x0020__x0028_WGS84_x0029_', 'Longitud', 'longitud']);
+    const price = fuelNumber(row.PrecioProducto ?? row['Precio Gasolina 95 E5'] ?? row.precioProducto);
+    const distance = Number.isFinite(lat) && Number.isFinite(lon)
+      ? fuelDistanceKm(fuelCenter.lat, fuelCenter.lon, lat, lon)
+      : NaN;
+    return {
+      id: row.IDEESS || row.IdEESS || '',
+      brand: row['Rótulo'] || row.Rotulo || row.rótulo || row.rotulo || 'Tankstation',
+      address: row['Dirección'] || row.Direccion || row.dirección || row.direccion || '',
+      locality: row.Localidad || row.localidad || '',
+      municipality: row.Municipio || row.municipio || '',
+      schedule: row.Horario || row.horario || '',
+      submission: row['Remisión'] || row.Remision || '',
+      price, lat, lon, distance
+    };
+  }).filter(item =>
+    Number.isFinite(item.price) && item.price > 0 &&
+    Number.isFinite(item.distance) && item.distance <= radius
+  );
+}
+
+function fuelSortedStations() {
+  const limit = Number(fuelCount?.value || 20);
+  const rows = [...fuelStations];
+  if (fuelSortMode === 'price') rows.sort((a, b) => a.price - b.price || a.distance - b.distance);
+  else rows.sort((a, b) => a.distance - b.distance || a.price - b.price);
+  return rows.slice(0, limit);
+}
+
+function renderFuelPrices() {
+  if (!fuelList) return;
+  const ft = getFuelText(uiLanguage);
+  const rows = fuelSortedStations();
+  const radius = Number(fuelRadius?.value || 25);
+
+  if (!rows.length) {
+    fuelList.innerHTML = `<div class="fuel-empty">${escapeHtml(ft.none)}</div>`;
+    return;
+  }
+
+  fuelList.innerHTML = rows.map(item => {
+    const place = [item.locality, item.municipality].filter(Boolean).join(' · ');
+    const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${item.lat},${item.lon}`)}`;
+    const schedule = item.schedule
+      ? `<span>${escapeHtml(ft.hours)}: ${escapeHtml(item.schedule)}</span>` : '';
+    return `<article class="fuel-card">
+      <div class="fuel-card-top">
+        <div>
+          <div class="fuel-brand">${escapeHtml(item.brand)}</div>
+          <div class="fuel-address">${escapeHtml(item.address)}${place ? `<br>${escapeHtml(place)}` : ''}</div>
+        </div>
+        <div class="fuel-price">
+          <strong>${item.price.toFixed(3).replace('.', ',')} €</strong>
+          <span>${escapeHtml(ft.perLitre)}</span>
+        </div>
+      </div>
+      <div class="fuel-detail">
+        <span><strong>${item.distance.toFixed(1).replace('.', ',')} km</strong> ${escapeHtml(ft.away)}</span>
+        ${schedule}
+      </div>
+      <a class="fuel-route" href="${mapsUrl}" target="_blank" rel="noopener noreferrer">${escapeHtml(ft.route)}</a>
+    </article>`;
+  }).join('');
+
+  fuelSetStatus(`${fuelStations.length} ${escapeHtml(ft.found)} ${radius} km.`);
+}
+
+function updateFuelLanguage() {
+  const ft = getFuelText(uiLanguage);
+  if (fuelPane) fuelPane.setAttribute('aria-label', ft.heading);
+  if (fuelHeading) fuelHeading.textContent = ft.heading;
+  if (fuelRadiusLabel) fuelRadiusLabel.textContent = ft.radius;
+  if (fuelCountLabel) fuelCountLabel.textContent = ft.count;
+  if (fuelHomeBtn) fuelHomeBtn.textContent = ft.home;
+  if (fuelGeoBtn) fuelGeoBtn.textContent = ft.myLocation;
+  if (fuelSortDistance) fuelSortDistance.textContent = ft.nearest;
+  if (fuelSortPrice) fuelSortPrice.textContent = ft.cheapest;
+  if (fuelRefresh) fuelRefresh.textContent = ft.refresh;
+  if (fuelLocation) fuelLocation.textContent = `${ft.origin}: ${fuelCenter.name === 'Villas Caravaning' ? ft.home : ft.myLocation}`;
+
+  if (fuelCount) {
+    const allOption = [...fuelCount.options].find(option => option.value === '999');
+    if (allOption) allOption.textContent = ft.all;
+  }
+
+  if (fuelLastLoadedAt && fuelUpdated) {
+    const stamp = new Date(fuelLastLoadedAt).toLocaleString(document.documentElement.lang || uiLanguage);
+    fuelUpdated.textContent = `${ft.updated}: ${stamp}${fuelLastSourceDate ? ` · ${ft.sourceDate}: ${fuelLastSourceDate}` : ''}`;
+  } else if (fuelUpdated) {
+    fuelUpdated.textContent = ft.initial;
+  }
+
+  if (fuelFooter) {
+    fuelFooter.innerHTML = `${escapeHtml(ft.source)} ${escapeHtml(ft.note)} · <a href="${FUEL_API_HELP_URL}" target="_blank" rel="noopener noreferrer">${escapeHtml(ft.official)}</a>`;
+  }
+
+  if (fuelRawRows.length) renderFuelPrices();
+  else if (!fuelLoading) fuelSetStatus(ft.initial);
+}
+
+async function fuelFetchOfficialData() {
+  let lastError = null;
+  for (const url of FUEL_API_URLS) {
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        mode: 'cors',
+        cache: 'no-store',
+        headers: { Accept: 'application/json' }
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const payload = await response.json();
+      return payload;
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError || new Error('Fuel service unavailable');
+}
+
+async function loadFuelPrices(force = false) {
+  if (fuelLoading) return;
+  if (!force && fuelRawRows.length && Date.now() - fuelLastLoadedAt < FUEL_REFRESH_MS) {
+    fuelRecalculate();
+    renderFuelPrices();
+    return;
+  }
+
+  const ft = getFuelText(uiLanguage);
+  fuelLoading = true;
+  if (fuelRefresh) fuelRefresh.disabled = true;
+  fuelSetStatus(`<span class="fuel-spinner"></span>${escapeHtml(ft.loading)}`);
+
+  try {
+    const payload = await fuelFetchOfficialData();
+    fuelRawRows = fuelExtractRows(payload);
+    if (!fuelRawRows.length) throw new Error('No stations returned');
+    fuelLastLoadedAt = Date.now();
+    fuelLastSourceDate = payload.Fecha || payload.fecha || '';
+    fuelRecalculate();
+    renderFuelPrices();
+    updateFuelLanguage();
+  } catch (error) {
+    console.warn('Fuel price error:', error);
+    const likelyCors = error instanceof TypeError;
+    fuelSetStatus(escapeHtml(likelyCors ? ft.cors : ft.error), 'error');
+    if (!fuelRawRows.length && fuelList) {
+      fuelList.innerHTML = `<div class="fuel-empty">${escapeHtml(ft.error)}</div>`;
+    }
+  } finally {
+    fuelLoading = false;
+    if (fuelRefresh) fuelRefresh.disabled = false;
+  }
+}
+
+function useFuelHome() {
+  const ft = getFuelText(uiLanguage);
+  fuelCenter = { lat: 37.62805, lon: -0.74430, name: 'Villas Caravaning' };
+  if (fuelLocation) fuelLocation.textContent = `${ft.origin}: ${ft.home}`;
+  fuelRecalculate();
+  if (fuelRawRows.length) renderFuelPrices();
+  else loadFuelPrices(false);
+}
+
+function useFuelGeolocation() {
+  const ft = getFuelText(uiLanguage);
+  if (!navigator.geolocation) {
+    fuelSetStatus(ft.geoError, 'warning');
+    return;
+  }
+  fuelSetStatus(`<span class="fuel-spinner"></span>${escapeHtml(ft.locating)}`);
+  navigator.geolocation.getCurrentPosition(position => {
+    fuelCenter = {
+      lat: position.coords.latitude,
+      lon: position.coords.longitude,
+      name: ft.myLocation
+    };
+    if (fuelLocation) {
+      fuelLocation.textContent = `${ft.origin}: ${ft.myLocation} (${fuelCenter.lat.toFixed(5)}, ${fuelCenter.lon.toFixed(5)})`;
+    }
+    fuelRecalculate();
+    if (fuelRawRows.length) renderFuelPrices();
+    else loadFuelPrices(false);
+  }, () => {
+    fuelSetStatus(ft.geoError, 'warning');
+  }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 });
+}
+
+setInterval(() => {
+  if (activeLayer === 'fuel' && !document.hidden) loadFuelPrices(true);
+}, FUEL_REFRESH_MS);
+
 function setActiveLayer(layer, resetView = true) {
-  const previousLayer = activeLayer;
-  activeLayer = layer === 'bus' ? 'bus' : (layer === 'beach' ? 'beach' : (layer === 'aerial' ? 'aerial' : 'site'));
+  activeLayer = layer === 'fuel' ? 'fuel' : (layer === 'bus' ? 'bus' : (layer === 'beach' ? 'beach' : (layer === 'aerial' ? 'aerial' : 'site')));
   const aerial = activeLayer === 'aerial';
   const beach = activeLayer === 'beach';
   const bus = activeLayer === 'bus';
+  const fuel = activeLayer === 'fuel';
   const site = activeLayer === 'site';
-  document.body.classList.toggle('content-view', beach || bus);
   const siteEl = document.getElementById('siteLeafletMap');
   const aerialEl = document.getElementById('aerialLeafletMap');
   if (siteEl) siteEl.style.display = site ? 'block' : 'none';
   if (aerialEl) aerialEl.style.display = aerial ? 'block' : 'none';
   if (beachStatusPane) beachStatusPane.classList.toggle('visible', beach);
   if (busPlanPane) busPlanPane.classList.toggle('visible', bus);
+  if (fuelPane) fuelPane.classList.toggle('visible', fuel);
   if (bus) loadBusPlan(false);
+  if (fuel) loadFuelPrices(false);
   if (beach && beachStatusFrame) {
-    const enteringBeach = previousLayer !== 'beach';
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        setBeachFrameSource(activeBeachSource, enteringBeach);
-        scheduleBeachInitialView(activeBeachSource);
-      });
-    });
-  } else {
-    document.body.classList.remove('beach-native-view');
+    const source = getBeachStatusSource();
+    if (beachStatusFrame.getAttribute('src') !== source.url) {
+      beachStatusFrame.setAttribute('src', source.url);
+    }
+    scheduleBeachInitialView(activeBeachSource);
   }
   updateBeachStatusUi();
 
@@ -4969,21 +5257,23 @@ function setActiveLayer(layer, resetView = true) {
   aerialLayerBtn.classList.toggle('active', aerial);
   if (beachStatusBtn) beachStatusBtn.classList.toggle('active', beach);
   if (busPlanBtn) busPlanBtn.classList.toggle('active', bus);
+  if (fuelBtn) fuelBtn.classList.toggle('active', fuel);
   siteLayerBtn.setAttribute('aria-pressed', site ? 'true' : 'false');
   aerialLayerBtn.setAttribute('aria-pressed', aerial ? 'true' : 'false');
   if (beachStatusBtn) beachStatusBtn.setAttribute('aria-pressed', beach ? 'true' : 'false');
   if (busPlanBtn) busPlanBtn.setAttribute('aria-pressed', bus ? 'true' : 'false');
+  if (fuelBtn) fuelBtn.setAttribute('aria-pressed', fuel ? 'true' : 'false');
 
   pnoaAttribution.classList.toggle('visible', aerial);
   calibrateGeoBtn.hidden = !aerial;
   exportGeoBtn.hidden = !aerial;
   const zoomControlsEl = document.getElementById('zoomControls');
-  if (zoomControlsEl) zoomControlsEl.style.display = (beach || bus) ? 'none' : 'flex';
+  if (zoomControlsEl) zoomControlsEl.style.display = (beach || bus || fuel) ? 'none' : 'flex';
 
   const lt = LAYER_UI[uiLanguage] || LAYER_UI.en;
   const t = getChrome(uiLanguage);
   const mapTitle = document.getElementById('mapTitle');
-  if (mapTitle) mapTitle.textContent = bus ? getBusText(uiLanguage).button : (beach ? (t.beachStatusButton || 'Strand') : (aerial ? lt.aerialTitle : lt.siteTitle));
+  if (mapTitle) mapTitle.textContent = fuel ? getFuelText(uiLanguage).button : (bus ? getBusText(uiLanguage).button : (beach ? (t.beachStatusButton || 'Strand') : (aerial ? lt.aerialTitle : lt.siteTitle)));
   const mapNote = document.getElementById('mapNote');
   updateMapNoteVisibility();
   cancelCalibration(false);
@@ -5157,7 +5447,6 @@ function showParcel(sector, number, lang = activeLanguage, preserveState = false
 
   if (!preserveState) {
     currentResult = { type: 'parcel', sector, number };
-    catastroExpandedParcelKey = '';
   }
 
   const parcelKey = `${sector} ${number}`;
@@ -5351,6 +5640,24 @@ siteLayerBtn.addEventListener('click', () => setActiveLayer('site'));
 aerialLayerBtn.addEventListener('click', () => setActiveLayer('aerial'));
 if (beachStatusBtn) beachStatusBtn.addEventListener('click', () => setActiveLayer('beach'));
 if (busPlanBtn) busPlanBtn.addEventListener('click', () => setActiveLayer('bus'));
+if (fuelBtn) fuelBtn.addEventListener('click', () => setActiveLayer('fuel'));
+if (fuelRefresh) fuelRefresh.addEventListener('click', () => loadFuelPrices(true));
+if (fuelHomeBtn) fuelHomeBtn.addEventListener('click', useFuelHome);
+if (fuelGeoBtn) fuelGeoBtn.addEventListener('click', useFuelGeolocation);
+if (fuelRadius) fuelRadius.addEventListener('change', () => { fuelRecalculate(); renderFuelPrices(); });
+if (fuelCount) fuelCount.addEventListener('change', renderFuelPrices);
+if (fuelSortDistance) fuelSortDistance.addEventListener('click', () => {
+  fuelSortMode = 'distance';
+  fuelSortDistance.classList.add('active');
+  fuelSortPrice.classList.remove('active');
+  renderFuelPrices();
+});
+if (fuelSortPrice) fuelSortPrice.addEventListener('click', () => {
+  fuelSortMode = 'price';
+  fuelSortPrice.classList.add('active');
+  fuelSortDistance.classList.remove('active');
+  renderFuelPrices();
+});
 if (busPlanRefresh) busPlanRefresh.addEventListener('click', () => loadBusPlan(true));
 if (beachCartagenaBtn) beachCartagenaBtn.addEventListener('click', () => setBeachStatusSource('cartagena'));
 if (beachNayadeBtn) beachNayadeBtn.addEventListener('click', () => setBeachStatusSource('nayade'));
@@ -5360,19 +5667,9 @@ if (beachZoomIn) beachZoomIn.addEventListener('click', () => setBeachZoom(beachZ
 if (beachZoomReset) beachZoomReset.addEventListener('click', resetBeachView);
 if (beachFocusVillas) beachFocusVillas.addEventListener('click', () => focusBeachView('cartagena'));
 if (beachStatusFrame) beachStatusFrame.addEventListener('load', () => {
-  const loadedSrc = beachStatusFrame.getAttribute('src') || '';
-  if (loadedSrc === 'about:blank') return;
-  if (activeLayer === 'beach') {
+  if (pendingBeachInitialView && activeLayer === 'beach') {
     pendingBeachInitialView = false;
-    setTimeout(() => {
-      focusBeachView(activeBeachSource);
-      // Et lille størrelses-nøk tvinger ældre Android WebView-versioner til at sende resize
-      // til den indlejrede eksterne side, uden at ændre den synlige størrelse.
-      if (activeBeachSource === 'cartagena') {
-        beachStatusFrame.style.height = 'calc(100% - 1px)';
-        requestAnimationFrame(() => { beachStatusFrame.style.height = '100%'; });
-      }
-    }, 120);
+    setTimeout(() => focusBeachView(activeBeachSource), 150);
   }
 });
 calibrateGeoBtn.addEventListener('click', () => calibrationMode ? cancelCalibration(true) : startCalibration());
@@ -5392,7 +5689,7 @@ updateMapSize(false);
 
 /* ---------- Error reporting ---------- */
 const ERROR_REPORT_EMAIL = 'villascaravaningappdebug.afterglow463@passmail.com';
-const APP_VERSION = '1.1.1';
+const APP_VERSION = '1.2.0';
 const REPORT_I18N = {
   da:{button:'⚠ Indberet fejl',title:'Indberet en fejl',close:'Luk',type:'Fejltype',item:'Parcel eller sted',itemPh:'Fx D 135, pool eller restaurant',desc:'Beskriv fejlen',descPh:'Forklar kort, hvad der er forkert.',pick:'Markér korrekt placering på luftfotoet',hint:'Valgfrit. Tryk på knappen og derefter på den korrekte placering på luftfotoet.',picking:'Tryk nu på den korrekte placering på luftfotoet.',picked:'Ny position valgt:',name:'Navn (valgfrit)',contact:'Kontaktoplysning (valgfrit)',cancel:'Annuller',send:'Opret e-mail',download:'Download JSON',copy:'Kopiér rapport',downloaded:'JSON-filen er downloadet. Vedhæft den manuelt, hvis du bruger webmail.',copied:'Fejlrapporten er kopieret til udklipsholderen.',copyFailed:'Rapporten kunne ikke kopieres automatisk.',needDesc:'Skriv venligst en kort beskrivelse.',emailOpened:'E-mailprogrammet åbnes. Tryk Send for at aflevere rapporten. Vedhæft eventuelt den downloadede JSON-fil.',emailFailed:'E-mailprogrammet kunne ikke åbnes.',types:['Forkert parcelplacering','Manglende parcel eller sted','Forkert eller manglende facilitet','Forkert navn eller tekst','Forkert søgeresultat','Busplan-fejl','Strandoplysning virker ikke','Problem med luftfoto','Oversættelsesfejl','Andet']},
   es:{button:'⚠ Informar de un error',title:'Informar de un error',close:'Cerrar',type:'Tipo de error',item:'Parcela o lugar',itemPh:'Ej. D 135, piscina o restaurante',desc:'Describa el error',descPh:'Explique brevemente qué es incorrecto.',pick:'Marcar la posición correcta en la foto aérea',hint:'Opcional. Pulse el botón y después el lugar correcto en la foto aérea.',picking:'Pulse ahora la posición correcta en la foto aérea.',picked:'Nueva posición seleccionada:',name:'Nombre (opcional)',contact:'Contacto (opcional)',cancel:'Cancelar',send:'Crear correo',download:'Descargar JSON',copy:'Copiar informe',downloaded:'El archivo JSON se ha descargado. Adjuntelo manualmente si usa webmail.',copied:'El informe se ha copiado al portapapeles.',copyFailed:'No se pudo copiar el informe automáticamente.',needDesc:'Escriba una breve descripción.',emailOpened:'Se abrirá la aplicación de correo. Pulse Enviar para entregar el informe. Adjunte el archivo JSON descargado si es necesario.',emailFailed:'No se pudo abrir la aplicación de correo.',types:['Ubicación incorrecta de parcela','Falta una parcela o lugar','Instalación incorrecta o ausente','Nombre o texto incorrecto','Resultado de búsqueda incorrecto','Error en el horario de autobuses','La información de playa no funciona','Problema con la foto aérea','Error de traducción','Otro']},
