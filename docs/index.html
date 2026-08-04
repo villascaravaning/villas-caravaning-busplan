@@ -1029,7 +1029,7 @@ body.landscape-mode.phone-mode .fuel-footer { padding: 3px 7px; font-size: .64re
 }
 
 
-/* InfoHub 1.4.1 – synlig funktionsmenu uden vandret rulning
+/* InfoHub 1.5.1 – synlig funktionsmenu uden vandret rulning
    Pladskort, Luftfoto, Strand, Busplan og Benzin står ved siden af hinanden.
    Når bredden ikke er tilstrækkelig, fortsætter knapperne automatisk på næste linje. */
 .toolbar {
@@ -1132,6 +1132,237 @@ body.content-view .map-viewport {
   min-height: 0 !important;
 }
 
+
+.privacy-note { text-align: center; }
+.privacy-note a {
+  color: #1f4ed8; font-weight: 700; text-decoration: none;
+}
+.privacy-note a:hover, .privacy-note a:focus { text-decoration: underline; }
+body.content-view .privacy-note { display: none !important; }
+
+
+/* InfoHub 1.5.1 – fuldskærmsliste med vigtige numre */
+.emergency-pane {
+  position: fixed;
+  inset: 0;
+  z-index: 8800;
+  display: none;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  background: #f6f8fb;
+  color: var(--ink);
+  padding-top: env(safe-area-inset-top);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+}
+.emergency-pane.visible { display: flex; }
+body.emergency-view { overflow: hidden !important; }
+body.emergency-view .report-fab { display: none !important; }
+
+.emergency-header {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) 46px;
+  align-items: center;
+  gap: 8px;
+  min-height: 62px;
+  padding: 8px 12px;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 2px 12px rgba(15, 23, 42, .08);
+}
+.emergency-back {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  background: #e9eef4;
+  color: var(--ink);
+  font-size: 1.55rem;
+  line-height: 1;
+}
+.emergency-back:hover,
+.emergency-back:focus-visible {
+  background: #dbe3ec;
+}
+.emergency-title {
+  min-width: 0;
+  margin: 0;
+  text-align: center;
+  font-size: clamp(1.18rem, 4vw, 1.55rem);
+  line-height: 1.2;
+}
+.emergency-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 14px max(12px, env(safe-area-inset-right)) 28px max(12px, env(safe-area-inset-left));
+}
+.emergency-content {
+  width: min(760px, 100%);
+  margin: 0 auto;
+}
+.emergency-urgent-note {
+  margin: 0 0 14px;
+  padding: 13px 14px;
+  border: 1px solid #fecaca;
+  border-left: 5px solid #b91c1c;
+  border-radius: 12px;
+  background: #fff1f2;
+  color: #7f1d1d;
+  font-weight: 800;
+  line-height: 1.45;
+}
+.emergency-section {
+  margin: 0 0 18px;
+}
+.emergency-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 9px;
+  font-size: 1.08rem;
+  line-height: 1.3;
+}
+.emergency-card {
+  margin: 0 0 9px;
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 3px 12px rgba(15, 23, 42, .05);
+}
+.emergency-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.emergency-card-copy {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.emergency-card-title {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.3;
+}
+.emergency-number {
+  display: block;
+  margin-top: 4px;
+  color: #991b1b;
+  font-size: clamp(1.28rem, 5vw, 1.7rem);
+  font-weight: 900;
+  letter-spacing: .01em;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.emergency-number:hover,
+.emergency-number:focus-visible {
+  text-decoration: underline;
+}
+.emergency-description {
+  margin: 9px 0 0;
+  color: #475569;
+  font-size: .92rem;
+  line-height: 1.5;
+}
+.emergency-actions {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: 7px;
+  justify-content: flex-end;
+}
+.emergency-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 39px;
+  padding: 0 12px;
+  border: 1px solid #cdd6e1;
+  border-radius: 999px;
+  background: #f8fafc;
+  color: #172554;
+  font-size: .82rem;
+  font-weight: 800;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.emergency-action:hover,
+.emergency-action:focus-visible {
+  background: #e9eef4;
+}
+.emergency-action.call {
+  border-color: #fecaca;
+  background: #fff1f2;
+  color: #991b1b;
+}
+.emergency-action.whatsapp {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+  color: #166534;
+}
+.emergency-source-note {
+  margin: 6px 2px 0;
+  color: var(--muted);
+  font-size: .78rem;
+  line-height: 1.5;
+}
+.emergency-source-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 9px;
+}
+.emergency-source-links a {
+  color: #1f4ed8;
+  font-weight: 700;
+  text-decoration: none;
+}
+.emergency-source-links a:hover,
+.emergency-source-links a:focus-visible {
+  text-decoration: underline;
+}
+
+@media (max-width: 520px) {
+  .emergency-header {
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
+    min-height: 58px;
+    padding: 7px 8px;
+  }
+  .emergency-scroll { padding-top: 10px; }
+  .emergency-card-top { display: block; }
+  .emergency-actions {
+    justify-content: flex-start;
+    margin-top: 11px;
+  }
+  .emergency-action {
+    flex: 1 1 118px;
+  }
+}
+@media (orientation: landscape) and (max-height: 560px) {
+  .emergency-header {
+    min-height: 50px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+  }
+  .emergency-back {
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+    min-height: 40px;
+  }
+  .emergency-scroll { padding-top: 8px; }
+  .emergency-card { padding: 10px 12px; }
+}
+
 </style>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
@@ -1174,6 +1405,7 @@ body.content-view .map-viewport {
           <button id="beachStatusBtn" type="button" class="map-link-btn" aria-pressed="false">Strand</button>
           <button id="busPlanBtn" type="button" class="map-link-btn" aria-pressed="false">Busplan</button>
           <button id="fuelBtn" type="button" class="map-link-btn" aria-pressed="false">Benzin</button>
+          <button id="emergencyBtn" type="button" class="map-link-btn" aria-pressed="false">Nødnumre</button>
           <button id="calibrateGeoBtn" type="button" class="calibration-action" hidden>Gem position</button>
           <button id="exportGeoBtn" type="button" class="calibration-action" hidden>Eksportér punkter</button>
         </div>
@@ -1271,7 +1503,19 @@ body.content-view .map-viewport {
     <p class="note" id="mapNote">Placeringer af parceller, sektorer og faciliteter er vejledende og kan indeholde unøjagtigheder. Indberet gerne fejl og mangler.</p>
   </section>
   <p class="note" id="copyrightNote">© 2026 René Andreasen · Programdesign, funktionalitet og egne bearbejdede søge- og positionsdata. Eksterne kilder er angivet på de relevante sider.</p>
+  <p class="note privacy-note"><a id="privacyLink" href="privacy.html">Privatliv · Privacidad · Privacy</a></p>
 </main>
+
+
+<div id="emergencyPane" class="emergency-pane" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="emergencyTitle">
+  <header class="emergency-header">
+    <button id="emergencyBackBtn" class="emergency-back" type="button" aria-label="Tilbage" title="Tilbage">←</button>
+    <h2 id="emergencyTitle" class="emergency-title">Vigtige numre</h2>
+  </header>
+  <div class="emergency-scroll">
+    <div id="emergencyContent" class="emergency-content"></div>
+  </div>
+</div>
 
 <button id="reportErrorBtn" class="report-fab" type="button">⚠ Indberet fejl</button>
 <div id="reportOverlay" class="report-overlay" role="dialog" aria-modal="true" aria-labelledby="reportTitle">
@@ -4337,6 +4581,142 @@ const FUEL_I18N = {
   }
 };
 
+
+const EMERGENCY_I18N = {
+  da: {
+    button:'Nødnumre', title:'Vis vigtige kontakt- og nødnumre', screenTitle:'Vigtige numre', back:'Tilbage',
+    urgentNote:'Ved akut fare eller behov for ambulance, brandvæsen eller politi: Ring 112.',
+    receptionHeading:'Reception',
+    receptionPhone:'Reception telefon', receptionWhatsApp:'Reception WhatsApp', receptionEmergency:'Reception akutnummer',
+    primaryHeading:'Primære alarmnumre',
+    n112Title:'112 · Generelt alarmnummer',
+    n112Desc:'Det generelle europæiske alarmnummer. Det er gratis, fungerer i hele Spanien og koordinerer ambulance, brandvæsen og politi. Der kan ringes fra mobiltelefoner, også når de er låst, uden aktivt SIM-kort eller uden dækning fra eget mobilselskab. Operatører kan ofte hjælpe på engelsk.',
+    n062Title:'062 · Guardia Civil',
+    n062Desc:'Det direkte nødnummer til Guardia Civil og normalt det mest relevante direkte politinummer for området omkring Villas Caravaning.',
+    otherHeading:'Andre politinumre',
+    n092Title:'092 · Policía Local',
+    n092Desc:'Det direkte nummer til Policía Local i Cartagena. Bruges især til kommunale opgaver, lokale uroligheder, trafik og hændelser i Cartagena kommune.',
+    n091Title:'091 · Policía Nacional',
+    n091Desc:'Det direkte nødnummer til Policía Nacional. De dækker især større byområder og efterforskning og kan viderestille til den relevante myndighed.',
+    digitalHeading:'Digital kontakt',
+    alertTitle:'AlertCops',
+    alertDesc:'En officiel og gratis app fra Spaniens indenrigsministerium. Den giver mulighed for at kontakte Policía Nacional eller Guardia Civil via chat og sende placering og relevante oplysninger.',
+    call:'Ring', whatsapp:'Åbn WhatsApp', openAlert:'Åbn AlertCops',
+    sourceNote:'Officielle nødnumre er kontrolleret mod spanske myndighedskilder. Receptionsnumrene er de kontaktoplysninger, der er oplyst til InfoHub.',
+    official112:'Officiel information om 112', officialCartagena:'Cartagenas nødnumre', officialAlert:'Officiel AlertCops-side'
+  },
+  es: {
+    button:'Emergencias', title:'Ver teléfonos importantes y de emergencia', screenTitle:'Teléfonos importantes', back:'Volver',
+    urgentNote:'En caso de peligro inmediato o si necesita ambulancia, bomberos o policía: llame al 112.',
+    receptionHeading:'Recepción',
+    receptionPhone:'Teléfono de recepción', receptionWhatsApp:'WhatsApp de recepción', receptionEmergency:'Urgencias de recepción',
+    primaryHeading:'Números principales de emergencia',
+    n112Title:'112 · Emergencias generales',
+    n112Desc:'Número europeo general de emergencias. Es gratuito, funciona en toda España y coordina ambulancias, bomberos y policía. Se puede llamar desde móviles bloqueados, sin una tarjeta SIM activa o sin cobertura del operador propio. A menudo pueden atender también en inglés.',
+    n062Title:'062 · Guardia Civil',
+    n062Desc:'Número directo de emergencias de la Guardia Civil y normalmente el número policial directo más relevante para la zona de Villas Caravaning.',
+    otherHeading:'Otros números policiales',
+    n092Title:'092 · Policía Local',
+    n092Desc:'Número directo de la Policía Local de Cartagena. Se utiliza especialmente para servicios municipales, alteraciones locales, tráfico e incidencias dentro del municipio de Cartagena.',
+    n091Title:'091 · Policía Nacional',
+    n091Desc:'Número directo de emergencias de la Policía Nacional. Atiende principalmente zonas urbanas y tareas de investigación y puede derivar la llamada al organismo competente.',
+    digitalHeading:'Contacto digital',
+    alertTitle:'AlertCops',
+    alertDesc:'Aplicación oficial y gratuita del Ministerio del Interior. Permite contactar por chat con la Policía Nacional o la Guardia Civil y enviar la ubicación y otra información relevante.',
+    call:'Llamar', whatsapp:'Abrir WhatsApp', openAlert:'Abrir AlertCops',
+    sourceNote:'Los números oficiales de emergencia se han contrastado con fuentes de las administraciones españolas. Los teléfonos de recepción son los facilitados a InfoHub.',
+    official112:'Información oficial del 112', officialCartagena:'Emergencias de Cartagena', officialAlert:'Página oficial de AlertCops'
+  },
+  de: {
+    button:'Notruf', title:'Wichtige Kontakt- und Notrufnummern anzeigen', screenTitle:'Wichtige Nummern', back:'Zurück',
+    urgentNote:'Bei unmittelbarer Gefahr oder wenn Rettungsdienst, Feuerwehr oder Polizei benötigt wird: 112 anrufen.',
+    receptionHeading:'Rezeption',
+    receptionPhone:'Telefon Rezeption', receptionWhatsApp:'WhatsApp Rezeption', receptionEmergency:'Notfallnummer Rezeption',
+    primaryHeading:'Wichtigste Notrufnummern',
+    n112Title:'112 · Allgemeiner Notruf',
+    n112Desc:'Die allgemeine europäische Notrufnummer. Sie ist kostenlos, gilt in ganz Spanien und koordiniert Rettungsdienst, Feuerwehr und Polizei. Anrufe sind auch von gesperrten Mobiltelefonen, ohne aktive SIM-Karte oder ohne Netz des eigenen Anbieters möglich. Häufig ist auch Hilfe auf Englisch möglich.',
+    n062Title:'062 · Guardia Civil',
+    n062Desc:'Direkte Notrufnummer der Guardia Civil und normalerweise die wichtigste direkte Polizeinummer für die Umgebung von Villas Caravaning.',
+    otherHeading:'Weitere Polizeinummern',
+    n092Title:'092 · Policía Local',
+    n092Desc:'Direkte Nummer der Policía Local in Cartagena. Vor allem für kommunale Aufgaben, örtliche Störungen, Verkehr und Vorfälle im Gemeindegebiet Cartagena.',
+    n091Title:'091 · Policía Nacional',
+    n091Desc:'Direkte Notrufnummer der Policía Nacional. Sie ist vor allem in größeren Stadtgebieten und bei Ermittlungen zuständig und kann an die richtige Behörde weiterleiten.',
+    digitalHeading:'Digitaler Kontakt',
+    alertTitle:'AlertCops',
+    alertDesc:'Offizielle kostenlose App des spanischen Innenministeriums. Sie ermöglicht Chatkontakt mit Policía Nacional oder Guardia Civil sowie das Senden des Standorts und relevanter Informationen.',
+    call:'Anrufen', whatsapp:'WhatsApp öffnen', openAlert:'AlertCops öffnen',
+    sourceNote:'Die offiziellen Notrufnummern wurden anhand spanischer Behördenquellen geprüft. Die Nummern der Rezeption wurden InfoHub mitgeteilt.',
+    official112:'Offizielle Informationen zu 112', officialCartagena:'Notrufnummern Cartagena', officialAlert:'Offizielle AlertCops-Seite'
+  },
+  en: {
+    button:'Emergency', title:'Show important contact and emergency numbers', screenTitle:'Important numbers', back:'Back',
+    urgentNote:'For immediate danger or when you need an ambulance, the fire service or police: call 112.',
+    receptionHeading:'Reception',
+    receptionPhone:'Reception telephone', receptionWhatsApp:'Reception WhatsApp', receptionEmergency:'Reception emergency number',
+    primaryHeading:'Primary emergency numbers',
+    n112Title:'112 · General emergency number',
+    n112Desc:'The general European emergency number. It is free, works throughout Spain and coordinates ambulance, fire and police services. Calls can be made from locked mobile phones, without an active SIM card or without coverage from your own provider. English assistance is often available.',
+    n062Title:'062 · Guardia Civil',
+    n062Desc:'The direct emergency number for the Guardia Civil and normally the most relevant direct police number for the area around Villas Caravaning.',
+    otherHeading:'Other police numbers',
+    n092Title:'092 · Local Police',
+    n092Desc:'The direct number for Cartagena Local Police. It is mainly used for municipal matters, local disturbances, traffic and incidents within the municipality of Cartagena.',
+    n091Title:'091 · National Police',
+    n091Desc:'The direct emergency number for the National Police. They mainly cover larger urban areas and investigations and can transfer you to the appropriate authority.',
+    digitalHeading:'Digital contact',
+    alertTitle:'AlertCops',
+    alertDesc:'An official free app from Spain’s Ministry of the Interior. It allows you to contact the National Police or Guardia Civil by chat and send your location and relevant information.',
+    call:'Call', whatsapp:'Open WhatsApp', openAlert:'Open AlertCops',
+    sourceNote:'Official emergency numbers have been checked against Spanish public-authority sources. Reception numbers are the contact details supplied to InfoHub.',
+    official112:'Official 112 information', officialCartagena:'Cartagena emergency numbers', officialAlert:'Official AlertCops site'
+  },
+  fr: {
+    button:'Urgences', title:'Afficher les contacts et numéros d’urgence importants', screenTitle:'Numéros importants', back:'Retour',
+    urgentNote:'En cas de danger immédiat ou si vous avez besoin d’une ambulance, des pompiers ou de la police : appelez le 112.',
+    receptionHeading:'Réception',
+    receptionPhone:'Téléphone de la réception', receptionWhatsApp:'WhatsApp de la réception', receptionEmergency:'Urgences de la réception',
+    primaryHeading:'Principaux numéros d’urgence',
+    n112Title:'112 · Urgences générales',
+    n112Desc:'Le numéro d’urgence européen général. Il est gratuit, fonctionne dans toute l’Espagne et coordonne ambulance, pompiers et police. Il est possible d’appeler depuis un mobile verrouillé, sans carte SIM active ou sans couverture de son propre opérateur. Une aide en anglais est souvent possible.',
+    n062Title:'062 · Guardia Civil',
+    n062Desc:'Le numéro d’urgence direct de la Guardia Civil et normalement le numéro de police direct le plus pertinent pour la zone autour de Villas Caravaning.',
+    otherHeading:'Autres numéros de police',
+    n092Title:'092 · Policía Local',
+    n092Desc:'Le numéro direct de la police locale de Cartagena, surtout pour les missions municipales, troubles locaux, circulation et incidents dans la commune de Cartagena.',
+    n091Title:'091 · Policía Nacional',
+    n091Desc:'Le numéro d’urgence direct de la police nationale. Elle intervient surtout dans les grandes zones urbaines et pour les enquêtes et peut transférer l’appel au service compétent.',
+    digitalHeading:'Contact numérique',
+    alertTitle:'AlertCops',
+    alertDesc:'Application officielle et gratuite du ministère espagnol de l’Intérieur. Elle permet de contacter par chat la Policía Nacional ou la Guardia Civil et d’envoyer sa position et des informations utiles.',
+    call:'Appeler', whatsapp:'Ouvrir WhatsApp', openAlert:'Ouvrir AlertCops',
+    sourceNote:'Les numéros d’urgence officiels ont été vérifiés auprès de sources publiques espagnoles. Les numéros de la réception sont ceux communiqués à InfoHub.',
+    official112:'Informations officielles sur le 112', officialCartagena:'Urgences de Cartagena', officialAlert:'Site officiel AlertCops'
+  },
+  it: {
+    button:'Emergenze', title:'Mostra contatti e numeri di emergenza importanti', screenTitle:'Numeri importanti', back:'Indietro',
+    urgentNote:'In caso di pericolo immediato o se servono ambulanza, vigili del fuoco o polizia: chiamare il 112.',
+    receptionHeading:'Reception',
+    receptionPhone:'Telefono reception', receptionWhatsApp:'WhatsApp reception', receptionEmergency:'Emergenze reception',
+    primaryHeading:'Principali numeri di emergenza',
+    n112Title:'112 · Emergenze generali',
+    n112Desc:'Il numero europeo generale di emergenza. È gratuito, funziona in tutta la Spagna e coordina ambulanza, vigili del fuoco e polizia. È possibile chiamare da cellulari bloccati, senza una SIM attiva o senza copertura del proprio operatore. Spesso è disponibile anche assistenza in inglese.',
+    n062Title:'062 · Guardia Civil',
+    n062Desc:'Il numero diretto di emergenza della Guardia Civil e normalmente il numero di polizia diretto più pertinente per l’area intorno a Villas Caravaning.',
+    otherHeading:'Altri numeri di polizia',
+    n092Title:'092 · Policía Local',
+    n092Desc:'Il numero diretto della polizia locale di Cartagena, soprattutto per compiti comunali, disordini locali, traffico e incidenti nel comune di Cartagena.',
+    n091Title:'091 · Policía Nacional',
+    n091Desc:'Il numero diretto di emergenza della polizia nazionale. Opera soprattutto nelle maggiori aree urbane e nelle indagini e può inoltrare la chiamata all’autorità competente.',
+    digitalHeading:'Contatto digitale',
+    alertTitle:'AlertCops',
+    alertDesc:'App ufficiale e gratuita del Ministero dell’Interno spagnolo. Consente di contattare in chat Policía Nacional o Guardia Civil e inviare la posizione e informazioni pertinenti.',
+    call:'Chiama', whatsapp:'Apri WhatsApp', openAlert:'Apri AlertCops',
+    sourceNote:'I numeri ufficiali di emergenza sono stati verificati con fonti delle autorità spagnole. I numeri della reception sono quelli comunicati a InfoHub.',
+    official112:'Informazioni ufficiali sul 112', officialCartagena:'Emergenze Cartagena', officialAlert:'Sito ufficiale AlertCops'
+  }
+};
+
 function getFuelText(lang = uiLanguage) {
   return FUEL_I18N[lang] || FUEL_I18N.en;
 }
@@ -4345,6 +4725,97 @@ function getBusText(lang = uiLanguage) {
   return BUS_I18N[lang] || BUS_I18N.en;
 }
 
+
+
+function getEmergencyText(lang = uiLanguage) {
+  return EMERGENCY_I18N[lang] || EMERGENCY_I18N.en;
+}
+
+function emergencyPhoneCard(title, number, description, options = {}) {
+  const t = getEmergencyText();
+  const telNumber = String(number).replace(/[^\d+]/g, '');
+  const actions = [
+    `<a class="emergency-action call" href="tel:${escapeHtml(telNumber)}">${escapeHtml(t.call)}</a>`
+  ];
+  if (options.whatsapp) {
+    actions.push(`<a class="emergency-action whatsapp" href="https://wa.me/${escapeHtml(options.whatsapp)}" target="_blank" rel="noopener noreferrer">${escapeHtml(t.whatsapp)}</a>`);
+  }
+  return `
+    <article class="emergency-card">
+      <div class="emergency-card-top">
+        <div class="emergency-card-copy">
+          <h3 class="emergency-card-title">${escapeHtml(title)}</h3>
+          <a class="emergency-number" href="tel:${escapeHtml(telNumber)}">${escapeHtml(number)}</a>
+          ${description ? `<p class="emergency-description">${escapeHtml(description)}</p>` : ''}
+        </div>
+        <div class="emergency-actions">${actions.join('')}</div>
+      </div>
+    </article>`;
+}
+
+function renderEmergencyContent() {
+  if (!emergencyContent) return;
+  const t = getEmergencyText();
+  emergencyContent.innerHTML = `
+    <p class="emergency-urgent-note">${escapeHtml(t.urgentNote)}</p>
+
+    <section class="emergency-section" aria-labelledby="emergencyReceptionHeading">
+      <h3 id="emergencyReceptionHeading" class="emergency-section-title">☎ ${escapeHtml(t.receptionHeading)}</h3>
+      ${emergencyPhoneCard(t.receptionPhone, '(+34) 968 118 444', '')}
+      ${emergencyPhoneCard(t.receptionWhatsApp, '(+34) 652 860 527', '', {whatsapp:'34652860527'})}
+      ${emergencyPhoneCard(t.receptionEmergency, '(+34) 639 219 762', '')}
+    </section>
+
+    <section class="emergency-section" aria-labelledby="emergencyPrimaryHeading">
+      <h3 id="emergencyPrimaryHeading" class="emergency-section-title">🚨 ${escapeHtml(t.primaryHeading)}</h3>
+      ${emergencyPhoneCard(t.n112Title, '112', t.n112Desc)}
+      ${emergencyPhoneCard(t.n062Title, '062', t.n062Desc)}
+    </section>
+
+    <section class="emergency-section" aria-labelledby="emergencyOtherHeading">
+      <h3 id="emergencyOtherHeading" class="emergency-section-title">🚓 ${escapeHtml(t.otherHeading)}</h3>
+      ${emergencyPhoneCard(t.n092Title, '092', t.n092Desc)}
+      ${emergencyPhoneCard(t.n091Title, '091', t.n091Desc)}
+    </section>
+
+    <section class="emergency-section" aria-labelledby="emergencyDigitalHeading">
+      <h3 id="emergencyDigitalHeading" class="emergency-section-title">📱 ${escapeHtml(t.digitalHeading)}</h3>
+      <article class="emergency-card">
+        <div class="emergency-card-top">
+          <div class="emergency-card-copy">
+            <h3 class="emergency-card-title">${escapeHtml(t.alertTitle)}</h3>
+            <p class="emergency-description">${escapeHtml(t.alertDesc)}</p>
+          </div>
+          <div class="emergency-actions">
+            <a class="emergency-action" href="https://alertcops.ses.mir.es/publico/alertcops/" target="_blank" rel="noopener noreferrer">${escapeHtml(t.openAlert)}</a>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <p class="emergency-source-note">${escapeHtml(t.sourceNote)}</p>
+    <div class="emergency-source-links">
+      <a href="https://administracion.gob.es/pag_Home/Tu-espacio-europeo/derechos-obligaciones/ciudadanos/asistencia-sanitaria/numeros-urgencia.html" target="_blank" rel="noopener noreferrer">${escapeHtml(t.official112)}</a>
+      <a href="https://www.cartagena.es/plantillas/8.asp?pt_idpag=3635" target="_blank" rel="noopener noreferrer">${escapeHtml(t.officialCartagena)}</a>
+      <a href="https://alertcops.ses.mir.es/publico/alertcops/" target="_blank" rel="noopener noreferrer">${escapeHtml(t.officialAlert)}</a>
+    </div>`;
+}
+
+function updateEmergencyLanguage() {
+  const t = getEmergencyText();
+  if (emergencyBtn) {
+    emergencyBtn.textContent = t.button;
+    emergencyBtn.title = t.title;
+    emergencyBtn.setAttribute('aria-label', t.title);
+  }
+  if (emergencyTitle) emergencyTitle.textContent = t.screenTitle;
+  if (emergencyBackBtn) {
+    emergencyBackBtn.setAttribute('aria-label', t.back);
+    emergencyBackBtn.title = t.back;
+  }
+  if (emergencyPane) emergencyPane.setAttribute('aria-label', t.screenTitle);
+  renderEmergencyContent();
+}
 
 function getChrome(lang = uiLanguage) {
   return UI_CHROME[lang] || UI_CHROME.en;
@@ -4411,6 +4882,16 @@ function updateMapNoteVisibility() {
   mapNote.style.display = note ? '' : 'none';
 }
 
+
+const PRIVACY_LINK_TEXT = {
+  da: 'Privatlivspolitik',
+  es: 'Política de privacidad',
+  de: 'Datenschutzerklärung',
+  en: 'Privacy policy',
+  fr: 'Politique de confidentialité',
+  it: 'Informativa sulla privacy'
+};
+
 function applyInterfaceLanguage(lang, options = {}) {
   const { keepStatus = false } = options;
   uiLanguage = lang || 'en';
@@ -4432,8 +4913,10 @@ function applyInterfaceLanguage(lang, options = {}) {
   const beachStatusBtn = document.getElementById('beachStatusBtn');
   const busPlanBtn = document.getElementById('busPlanBtn');
   const fuelBtn = document.getElementById('fuelBtn');
+  const emergencyBtn = document.getElementById('emergencyBtn');
   const mapNote = document.getElementById('mapNote');
   const copyrightNote = document.getElementById('copyrightNote');
+  const privacyLink = document.getElementById('privacyLink');
   const lt = LAYER_UI[uiLanguage] || LAYER_UI.en;
   if (pageTitle) pageTitle.textContent = t.h1;
   if (pageSubtitle) pageSubtitle.textContent = t.subtitle;
@@ -4468,6 +4951,7 @@ function applyInterfaceLanguage(lang, options = {}) {
     fuelBtn.setAttribute('aria-label', ft.title);
   }
   updateFuelLanguage();
+  updateEmergencyLanguage();
   updateBeachStatusUi();
   if (activeBeachSource === 'find' && beachStatusFrame && activeLayer === 'beach') {
     setBeachFrameSource('find', true);
@@ -4489,6 +4973,10 @@ function applyInterfaceLanguage(lang, options = {}) {
   updateMapNoteVisibility();
   if (copyrightNote) {
     copyrightNote.textContent = t.copyrightText;
+  }
+  if (privacyLink) {
+    privacyLink.textContent = PRIVACY_LINK_TEXT[uiLanguage] || PRIVACY_LINK_TEXT.en;
+    privacyLink.setAttribute('aria-label', privacyLink.textContent);
   }
   if (!keepStatus || !statusEl.innerHTML.trim()) statusEl.innerHTML = t.statusDefault;
   renderLanguageSwitcher();
@@ -4533,6 +5021,11 @@ const busPlanDepartures = document.getElementById('busPlanDepartures');
 const busPlanFooter = document.getElementById('busPlanFooter');
 const fuelBtn = document.getElementById('fuelBtn');
 const fuelPane = document.getElementById('fuelPane');
+const emergencyBtn = document.getElementById('emergencyBtn');
+const emergencyPane = document.getElementById('emergencyPane');
+const emergencyBackBtn = document.getElementById('emergencyBackBtn');
+const emergencyTitle = document.getElementById('emergencyTitle');
+const emergencyContent = document.getElementById('emergencyContent');
 const fuelHeading = document.getElementById('fuelHeading');
 const fuelUpdated = document.getElementById('fuelUpdated');
 const fuelRadiusLabel = document.getElementById('fuelRadiusLabel');
@@ -5875,8 +6368,18 @@ function fuelParsePayload(value) {
   return value;
 }
 
-/* Optional native bridge for a future published Android version.
-   Java/Kotlin can call window.InfoHubReceiveFuelPrices(json) after a background request. */
+
+function infoHubNativeAvailable() {
+  return Boolean(window.InfoHubNative && typeof window.InfoHubNative.postMessage === 'function');
+}
+
+function infoHubNativePost(type, payload = '') {
+  if (!infoHubNativeAvailable()) throw new Error('InfoHub native bridge unavailable');
+  window.InfoHubNative.postMessage(JSON.stringify({ type, payload }));
+}
+
+/* Origin-begrænset Android-beskedbro. Android kan kalde
+   window.InfoHubReceiveFuelPrices(json) efter en baggrundsanmodning. */
 window.InfoHubReceiveFuelPrices = function(payload) {
   if (!fuelNativePending) return;
   try {
@@ -5891,44 +6394,28 @@ window.InfoHubReceiveFuelPrices = function(payload) {
 };
 
 async function fuelFetchViaAndroidBridge() {
-  const bridge = window.AndroidBridge;
-  if (!bridge) throw new Error('Android fuel bridge unavailable');
+  if (!infoHubNativeAvailable()) throw new Error('Android fuel bridge unavailable');
+  if (fuelNativePending) throw new Error('Fuel bridge request already pending');
 
-  for (const method of ['getFuelPrices', 'fetchFuelPrices']) {
-    if (typeof bridge[method] === 'function') {
-      const value = bridge[method]();
-      if (value !== undefined && value !== null && value !== '') return fuelParsePayload(value);
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      if (fuelNativePending) fuelNativePending = null;
+      reject(new Error('Android fuel bridge timeout'));
+    }, FUEL_FETCH_TIMEOUT_MS);
+
+    fuelNativePending = { resolve, reject, timer };
+    try {
+      infoHubNativePost('fuel.request');
+    } catch (error) {
+      clearTimeout(timer);
+      fuelNativePending = null;
+      reject(error);
     }
-  }
-
-  if (typeof bridge.requestFuelPrices === 'function') {
-    if (fuelNativePending) throw new Error('Fuel bridge request already pending');
-    return new Promise((resolve, reject) => {
-      const timer = setTimeout(() => {
-        if (fuelNativePending) fuelNativePending = null;
-        reject(new Error('Android fuel bridge timeout'));
-      }, FUEL_FETCH_TIMEOUT_MS);
-      fuelNativePending = { resolve, reject, timer };
-      try {
-        bridge.requestFuelPrices();
-      } catch (error) {
-        clearTimeout(timer);
-        fuelNativePending = null;
-        reject(error);
-      }
-    });
-  }
-
-  throw new Error('Android fuel bridge method unavailable');
+  });
 }
 
 function fuelHasNativeBridge() {
-  const bridge = window.AndroidBridge;
-  return Boolean(bridge && (
-    typeof bridge.getFuelPrices === 'function' ||
-    typeof bridge.fetchFuelPrices === 'function' ||
-    typeof bridge.requestFuelPrices === 'function'
-  ));
+  return infoHubNativeAvailable();
 }
 
 async function fuelFetchUrl(url) {
@@ -6486,6 +6973,71 @@ function findParcel() {
 }
 
 
+
+let emergencyViewOpen = false;
+let emergencyReturnFocus = null;
+
+function setMainContentInert(inert) {
+  const main = document.querySelector('main.app');
+  if (!main) return;
+  if ('inert' in main) main.inert = Boolean(inert);
+  if (inert) main.setAttribute('aria-hidden', 'true');
+  else main.removeAttribute('aria-hidden');
+}
+
+function openEmergencyView(pushHistory = true) {
+  if (!emergencyPane || emergencyViewOpen) return;
+  emergencyViewOpen = true;
+  emergencyReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : emergencyBtn;
+  updateEmergencyLanguage();
+  document.body.classList.add('emergency-view');
+  emergencyPane.classList.add('visible');
+  emergencyPane.setAttribute('aria-hidden', 'false');
+  if (emergencyBtn) {
+    emergencyBtn.classList.add('active');
+    emergencyBtn.setAttribute('aria-pressed', 'true');
+  }
+  setMainContentInert(true);
+
+  if (pushHistory && !(history.state && history.state.infoHubEmergency)) {
+    history.pushState({infoHubEmergency:true}, '', '#emergency');
+  }
+
+  requestAnimationFrame(() => {
+    emergencyBackBtn?.focus();
+    const scroller = emergencyPane.querySelector('.emergency-scroll');
+    if (scroller) scroller.scrollTop = 0;
+  });
+}
+
+function closeEmergencyView(options = {}) {
+  const {returnFocus = true, useHistory = false} = options;
+  if (!emergencyViewOpen) return;
+
+  if (useHistory && history.state && history.state.infoHubEmergency) {
+    history.back();
+    return;
+  }
+
+  emergencyViewOpen = false;
+  document.body.classList.remove('emergency-view');
+  emergencyPane?.classList.remove('visible');
+  emergencyPane?.setAttribute('aria-hidden', 'true');
+  if (emergencyBtn) {
+    emergencyBtn.classList.remove('active');
+    emergencyBtn.setAttribute('aria-pressed', 'false');
+  }
+  setMainContentInert(false);
+  if (returnFocus) {
+    requestAnimationFrame(() => {
+      const target = emergencyReturnFocus && document.contains(emergencyReturnFocus)
+        ? emergencyReturnFocus
+        : emergencyBtn;
+      target?.focus();
+    });
+  }
+}
+
 function clearSearch() {
   input.value = '';
   currentResult = null;
@@ -6513,6 +7065,8 @@ aerialLayerBtn.addEventListener('click', () => setActiveLayer('aerial'));
 if (beachStatusBtn) beachStatusBtn.addEventListener('click', () => setActiveLayer('beach'));
 if (busPlanBtn) busPlanBtn.addEventListener('click', () => setActiveLayer('bus'));
 if (fuelBtn) fuelBtn.addEventListener('click', () => setActiveLayer('fuel'));
+if (emergencyBtn) emergencyBtn.addEventListener('click', () => openEmergencyView(true));
+if (emergencyBackBtn) emergencyBackBtn.addEventListener('click', () => closeEmergencyView({useHistory:true}));
 if (fuelRefresh) fuelRefresh.addEventListener('click', () => loadFuelPrices(true));
 if (fuelHomeBtn) fuelHomeBtn.addEventListener('click', useFuelHome);
 if (fuelGeoBtn) fuelGeoBtn.addEventListener('click', useFuelGeolocation);
@@ -6592,6 +7146,18 @@ if (layerSwitchEl) {
   });
 }
 
+
+window.addEventListener('popstate', () => {
+  if (emergencyViewOpen) closeEmergencyView({returnFocus:true, useHistory:false});
+});
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && emergencyViewOpen) {
+    event.preventDefault();
+    closeEmergencyView({useHistory:true});
+  }
+});
+
 if (window.visualViewport) {
   window.visualViewport.addEventListener('resize', () => {
     detectDeviceLayout();
@@ -6599,7 +7165,10 @@ if (window.visualViewport) {
   });
 }
 
-document.body.classList.toggle('android-webview', Boolean(window.AndroidBridge) || /;\s*wv\)/i.test(navigator.userAgent));
+document.body.classList.toggle('android-webview', infoHubNativeAvailable() || /;\s*wv\)/i.test(navigator.userAgent));
+if (infoHubNativeAvailable()) {
+  try { infoHubNativePost('deviceInfo.request'); } catch (e) {}
+}
 
 setActiveLayer('site', false);
 detectDeviceLayout();
@@ -6608,10 +7177,10 @@ updateMapSize(false);
 
 /* ---------- Error reporting ---------- */
 const ERROR_REPORT_EMAIL = 'villascaravaningappdebug.afterglow463@passmail.com';
-const APP_VERSION = '1.4.1';
+const APP_VERSION = '1.5.1';
 const REPORT_I18N = {
-  da:{button:'⚠ Indberet fejl',title:'Indberet en fejl',close:'Luk',type:'Fejltype',item:'Parcel eller sted',itemPh:'Fx D 135, pool eller restaurant',desc:'Beskriv fejlen',descPh:'Forklar kort, hvad der er forkert.',pick:'Markér korrekt placering på luftfotoet',hint:'Valgfrit. Tryk på knappen og derefter på den korrekte placering på luftfotoet.',picking:'Tryk nu på den korrekte placering på luftfotoet.',picked:'Ny position valgt:',name:'Navn (valgfrit)',contact:'Kontaktoplysning (valgfrit)',cancel:'Annuller',send:'Opret e-mail',download:'Download JSON',copy:'Kopiér rapport',downloaded:'JSON-filen er downloadet. Vedhæft den manuelt, hvis du bruger webmail.',copied:'Fejlrapporten er kopieret til udklipsholderen.',copyFailed:'Rapporten kunne ikke kopieres automatisk.',needDesc:'Skriv venligst en kort beskrivelse.',emailOpened:'E-mailprogrammet åbnes. Tryk Send for at aflevere rapporten. Vedhæft eventuelt den downloadede JSON-fil.',emailFailed:'E-mailprogrammet kunne ikke åbnes.',types:['Forkert parcelplacering','Manglende parcel eller sted','Forkert eller manglende facilitet','Forkert navn eller tekst','Forkert søgeresultat','Busplan-fejl','Benzinpriser virker ikke','Strandoplysning virker ikke','Problem med luftfoto','Oversættelsesfejl','Andet']},
-  es:{button:'⚠ Informar de un error',title:'Informar de un error',close:'Cerrar',type:'Tipo de error',item:'Parcela o lugar',itemPh:'Ej. D 135, piscina o restaurante',desc:'Describa el error',descPh:'Explique brevemente qué es incorrecto.',pick:'Marcar la posición correcta en la foto aérea',hint:'Opcional. Pulse el botón y después el lugar correcto en la foto aérea.',picking:'Pulse ahora la posición correcta en la foto aérea.',picked:'Nueva posición seleccionada:',name:'Nombre (opcional)',contact:'Contacto (opcional)',cancel:'Cancelar',send:'Crear correo',download:'Descargar JSON',copy:'Copiar informe',downloaded:'El archivo JSON se ha descargado. Adjuntelo manualmente si usa webmail.',copied:'El informe se ha copiado al portapapeles.',copyFailed:'No se pudo copiar el informe automáticamente.',needDesc:'Escriba una breve descripción.',emailOpened:'Se abrirá la aplicación de correo. Pulse Enviar para entregar el informe. Adjunte el archivo JSON descargado si es necesario.',emailFailed:'No se pudo abrir la aplicación de correo.',types:['Ubicación incorrecta de parcela','Falta una parcela o lugar','Instalación incorrecta o ausente','Nombre o texto incorrecto','Resultado de búsqueda incorrecto','Error en el horario de autobuses','Los precios de gasolina no funcionan','La información de playa no funciona','Problema con la foto aérea','Error de traducción','Otro']},
+  da:{button:'⚠ Indberet fejl',title:'Indberet en fejl',close:'Luk',type:'Fejltype',item:'Parcel eller sted',itemPh:'Fx D 135, pool eller restaurant',desc:'Beskriv fejlen',descPh:'Forklar kort, hvad der er forkert.',pick:'Markér korrekt placering på luftfotoet',hint:'Valgfrit. Tryk på knappen og derefter på den korrekte placering på luftfotoet.',picking:'Tryk nu på den korrekte placering på luftfotoet.',picked:'Ny position valgt:',name:'Navn (valgfrit)',contact:'Kontaktoplysning (valgfrit)',cancel:'Annuller',send:'Opret e-mail',download:'Download JSON',copy:'Kopiér rapport',downloaded:'JSON-filen er downloadet. Vedhæft den manuelt, hvis du bruger webmail.',copied:'Fejlrapporten er kopieret til udklipsholderen.',copyFailed:'Rapporten kunne ikke kopieres automatisk.',needDesc:'Skriv venligst en kort beskrivelse.',emailOpened:'E-mailprogrammet åbnes. Tryk Send for at aflevere rapporten. Vedhæft eventuelt den downloadede JSON-fil.',emailFailed:'E-mailprogrammet kunne ikke åbnes.',types:['Forkert parcelplacering','Manglende parcel eller sted','Forkert eller manglende facilitet','Forkert navn eller tekst','Forkert søgeresultat','Busplan-fejl','Benzinpriser virker ikke','Strandoplysning virker ikke','Nødnummer eller kontaktoplysning er forkert','Problem med luftfoto','Oversættelsesfejl','Andet']},
+  es:{button:'⚠ Informar de un error',title:'Informar de un error',close:'Cerrar',type:'Tipo de error',item:'Parcela o lugar',itemPh:'Ej. D 135, piscina o restaurante',desc:'Describa el error',descPh:'Explique brevemente qué es incorrecto.',pick:'Marcar la posición correcta en la foto aérea',hint:'Opcional. Pulse el botón y después el lugar correcto en la foto aérea.',picking:'Pulse ahora la posición correcta en la foto aérea.',picked:'Nueva posición seleccionada:',name:'Nombre (opcional)',contact:'Contacto (opcional)',cancel:'Cancelar',send:'Crear correo',download:'Descargar JSON',copy:'Copiar informe',downloaded:'El archivo JSON se ha descargado. Adjuntelo manualmente si usa webmail.',copied:'El informe se ha copiado al portapapeles.',copyFailed:'No se pudo copiar el informe automáticamente.',needDesc:'Escriba una breve descripción.',emailOpened:'Se abrirá la aplicación de correo. Pulse Enviar para entregar el informe. Adjunte el archivo JSON descargado si es necesario.',emailFailed:'No se pudo abrir la aplicación de correo.',types:['Ubicación incorrecta de parcela','Falta una parcela o lugar','Instalación incorrecta o ausente','Nombre o texto incorrecto','Resultado de búsqueda incorrecto','Error en el horario de autobuses','Los precios de gasolina no funcionan','La información de playa no funciona','Número de emergencia o contacto incorrecto','Problema con la foto aérea','Error de traducción','Otro']},
   de:{button:'⚠ Fehler melden',title:'Fehler melden',close:'Schließen',type:'Fehlerart',item:'Parzelle oder Ort',itemPh:'Z. B. D 135, Pool oder Restaurant',desc:'Fehler beschreiben',descPh:'Beschreiben Sie kurz, was falsch ist.',pick:'Richtige Position im Luftbild markieren',hint:'Optional. Taste drücken und anschließend die richtige Stelle im Luftbild antippen.',picking:'Tippen Sie jetzt die richtige Position im Luftbild an.',picked:'Neue Position gewählt:',name:'Name (optional)',contact:'Kontaktangabe (optional)',cancel:'Abbrechen',send:'E-Mail erstellen',download:'JSON herunterladen',copy:'Bericht kopieren',downloaded:'Die JSON-Datei wurde heruntergeladen. Bei Webmail bitte manuell anhängen.',copied:'Der Fehlerbericht wurde in die Zwischenablage kopiert.',copyFailed:'Der Bericht konnte nicht automatisch kopiert werden.',needDesc:'Bitte geben Sie eine kurze Beschreibung ein.',emailOpened:'Die E-Mail-App wird geöffnet. Tippen Sie auf Senden. Hängen Sie die heruntergeladene JSON-Datei ggf. manuell an.',emailFailed:'Die E-Mail-App konnte nicht geöffnet werden.',types:['Falsche Parzellenposition','Fehlende Parzelle oder Ort','Falsche oder fehlende Einrichtung','Falscher Name oder Text','Falsches Suchergebnis','Busfahrplan-Fehler','Benzinpreise funktionieren nicht','Strandinformation funktioniert nicht','Problem mit dem Luftbild','Übersetzungsfehler','Sonstiges']},
   en:{button:'⚠ Report error',title:'Report an error',close:'Close',type:'Error type',item:'Plot or place',itemPh:'E.g. D 135, pool or restaurant',desc:'Describe the error',descPh:'Briefly explain what is wrong.',pick:'Mark correct position on aerial photo',hint:'Optional. Press the button and then tap the correct place on the aerial photo.',picking:'Now tap the correct position on the aerial photo.',picked:'New position selected:',name:'Name (optional)',contact:'Contact details (optional)',cancel:'Cancel',send:'Create email',download:'Download JSON',copy:'Copy report',downloaded:'The JSON file has been downloaded. Attach it manually if you use webmail.',copied:'The error report has been copied to the clipboard.',copyFailed:'The report could not be copied automatically.',needDesc:'Please enter a short description.',emailOpened:'Your email app will open. Tap Send to deliver the report. Attach the downloaded JSON file if needed.',emailFailed:'The email app could not be opened.',types:['Incorrect plot position','Missing plot or place','Incorrect or missing facility','Incorrect name or text','Incorrect search result','Bus timetable error','Petrol prices not working','Beach information not working','Aerial photo problem','Translation error','Other']},
   fr:{button:'⚠ Signaler une erreur',title:'Signaler une erreur',close:'Fermer',type:"Type d’erreur",item:'Parcelle ou lieu',itemPh:'Ex. D 135, piscine ou restaurant',desc:"Décrivez l’erreur",descPh:'Expliquez brièvement ce qui est incorrect.',pick:'Marquer la position correcte sur la photo aérienne',hint:'Facultatif. Appuyez sur le bouton puis sur le bon emplacement sur la photo aérienne.',picking:'Appuyez maintenant sur la position correcte sur la photo aérienne.',picked:'Nouvelle position sélectionnée :',name:'Nom (facultatif)',contact:'Coordonnées (facultatif)',cancel:'Annuler',send:'Créer un e-mail',download:'Télécharger JSON',copy:'Copier le rapport',downloaded:'Le fichier JSON a été téléchargé. Joignez-le manuellement si vous utilisez le webmail.',copied:'Le rapport a été copié dans le presse-papiers.',copyFailed:'Impossible de copier le rapport automatiquement.',needDesc:'Veuillez saisir une courte description.',emailOpened:"L’application e-mail va s’ouvrir. Appuyez sur Envoyer. Joignez le fichier JSON téléchargé si nécessaire.",emailFailed:"Impossible d’ouvrir l’application e-mail.",types:['Position de parcelle incorrecte','Parcelle ou lieu manquant','Installation incorrecte ou manquante','Nom ou texte incorrect','Résultat de recherche incorrect','Erreur d’horaire de bus','Les prix de l’essence ne fonctionnent pas','Information de plage ne fonctionne pas','Problème de photo aérienne','Erreur de traduction','Autre']},
@@ -6664,7 +7233,9 @@ function finishReportPick(latlng){
   reportEls.overlay.classList.add('open');
 }
 function nativeDeviceInfo(){
-  try { if(window.AndroidBridge?.getDeviceInfo) return JSON.parse(window.AndroidBridge.getDeviceInfo()); } catch(e){}
+  if (window.__INFOHUB_NATIVE_DEVICE_INFO__ && typeof window.__INFOHUB_NATIVE_DEVICE_INFO__ === 'object') {
+    return {...window.__INFOHUB_NATIVE_DEVICE_INFO__};
+  }
   return {platform:navigator.platform||'web', userAgent:navigator.userAgent||'', screen:`${screen.width}x${screen.height}`, orientation:screen.orientation?.type||''};
 }
 
@@ -6706,7 +7277,7 @@ function buildErrorReport(){
   return {
     schema:'villas-caravaning-error-report',version:1,reportId:`VC-${Date.now()}`,createdAt:new Date().toISOString(),
     recipient:ERROR_REPORT_EMAIL,appVersion:APP_VERSION,language:uiLanguage,
-    errorType:{code:['plot_position','missing_item','facility_issue','name_text','search_result','bus_timetable','beach_information','aerial_problem','translation','other'][typeIndex]||'other',label:r.types[typeIndex]||r.types.at(-1)},
+    errorType:{code:['plot_position','missing_item','facility_issue','name_text','search_result','bus_timetable','fuel_prices','beach_information','aerial_problem','translation','other'][typeIndex]||'other',label:r.types[typeIndex]||r.types.at(-1)},
     item:reportEls.item.value.trim(),searchText:input.value.trim(),description:reportEls.desc.value.trim(),
     mapState:{activeLayer,zoom:map?map.getZoom():null,center:map?{lat:Number(map.getCenter().lat.toFixed(8)),lng:Number(map.getCenter().lng.toFixed(8))}:null},
     currentPosition,suggestedPosition:reportSuggestedPosition,
@@ -6792,8 +7363,8 @@ function sendErrorReport(){
   const report=ensureReportReady(); if(!report) return;
   const json=JSON.stringify(report,null,2);
   try {
-    if(window.AndroidBridge?.sendErrorReport){
-      window.AndroidBridge.sendErrorReport(json);
+    if(infoHubNativeAvailable()){
+      infoHubNativePost('errorReport.send', json);
       reportEls.status.textContent=r.emailOpened;
       return;
     }
