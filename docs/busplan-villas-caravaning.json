@@ -1,7 +1,7 @@
 {
   "schema": "villas-caravaning-busplan",
   "version": 1,
-  "generatedAt": "2026-09-13T11:33:43.378260+02:00",
+  "generatedAt": "2026-09-14T11:52:38.995700+02:00",
   "timezone": "Europe/Madrid",
   "validForDays": 14,
   "source": {
@@ -51,120 +51,6 @@
     }
   ],
   "days": [
-    {
-      "date": "2026-09-13",
-      "weekday": "Sunday",
-      "departures": [
-        {
-          "time": "07:42",
-          "rawTime": "07:42:00",
-          "stopId": "0000757000000001",
-          "stopName": "Caravaning Camping",
-          "routeShortName": "ALSA - L43v Puebl",
-          "routeLongName": "L43 La Manga-Cartagena",
-          "headsign": "Cartagena",
-          "directionId": "0",
-          "tripId": "000003900002202700001201",
-          "serviceId": "000003900002202700001201"
-        },
-        {
-          "time": "09:36",
-          "rawTime": "09:36:00",
-          "stopId": "0000757000000001",
-          "stopName": "Caravaning Camping",
-          "routeShortName": "ALSA - L43v Puebl",
-          "routeLongName": "L43 La Manga-Cartagena",
-          "headsign": "Cartagena",
-          "directionId": "0",
-          "tripId": "000003900002202700001202",
-          "serviceId": "000003900002202700001202"
-        },
-        {
-          "time": "11:37",
-          "rawTime": "11:37:00",
-          "stopId": "0000757000000001",
-          "stopName": "Caravaning Camping",
-          "routeShortName": "ALSA - L43v Puebl",
-          "routeLongName": "L43 La Manga-Cartagena",
-          "headsign": "Cartagena",
-          "directionId": "0",
-          "tripId": "000003900002202700001203",
-          "serviceId": "000003900002202700001203"
-        },
-        {
-          "time": "13:42",
-          "rawTime": "13:42:00",
-          "stopId": "0000757000000001",
-          "stopName": "Caravaning Camping",
-          "routeShortName": "ALSA - L43v Puebl",
-          "routeLongName": "L43 La Manga-Cartagena",
-          "headsign": "Cartagena",
-          "directionId": "0",
-          "tripId": "000003900002202700001204",
-          "serviceId": "000003900002202700001204"
-        },
-        {
-          "time": "16:06",
-          "rawTime": "16:06:00",
-          "stopId": "0000757000000001",
-          "stopName": "Caravaning Camping",
-          "routeShortName": "ALSA - L43v Puebl",
-          "routeLongName": "L43 La Manga-Cartagena",
-          "headsign": "Cartagena",
-          "directionId": "0",
-          "tripId": "000003900002202700001205",
-          "serviceId": "000003900002202700001205"
-        },
-        {
-          "time": "17:07",
-          "rawTime": "17:07:00",
-          "stopId": "0000757000000001",
-          "stopName": "Caravaning Camping",
-          "routeShortName": "ALSA - L43v Puebl",
-          "routeLongName": "L43 La Manga-Cartagena",
-          "headsign": "Cartagena",
-          "directionId": "0",
-          "tripId": "000003900002202700001206",
-          "serviceId": "000003900002202700001206"
-        },
-        {
-          "time": "18:42",
-          "rawTime": "18:42:00",
-          "stopId": "0000757000000001",
-          "stopName": "Caravaning Camping",
-          "routeShortName": "ALSA - L43v Puebl",
-          "routeLongName": "L43 La Manga-Cartagena",
-          "headsign": "Cartagena",
-          "directionId": "0",
-          "tripId": "000003900002202700001207",
-          "serviceId": "000003900002202700001207"
-        },
-        {
-          "time": "19:37",
-          "rawTime": "19:37:00",
-          "stopId": "0000757000000001",
-          "stopName": "Caravaning Camping",
-          "routeShortName": "ALSA - L43v Puebl",
-          "routeLongName": "L43 La Manga-Cartagena",
-          "headsign": "Cartagena",
-          "directionId": "0",
-          "tripId": "000003900002202700001208",
-          "serviceId": "000003900002202700001208"
-        },
-        {
-          "time": "21:06",
-          "rawTime": "21:06:00",
-          "stopId": "0000757000000001",
-          "stopName": "Caravaning Camping",
-          "routeShortName": "ALSA - L43v Puebl",
-          "routeLongName": "L43 La Manga-Cartagena",
-          "headsign": "Cartagena",
-          "directionId": "0",
-          "tripId": "000003900002202700001209",
-          "serviceId": "000003900002202700001209"
-        }
-      ]
-    },
     {
       "date": "2026-09-14",
       "weekday": "Monday",
@@ -3132,6 +3018,120 @@
           "directionId": "0",
           "tripId": "000003900002202700001107",
           "serviceId": "000003900002202700001107"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-27",
+      "weekday": "Sunday",
+      "departures": [
+        {
+          "time": "07:42",
+          "rawTime": "07:42:00",
+          "stopId": "0000757000000001",
+          "stopName": "Caravaning Camping",
+          "routeShortName": "ALSA - L43v Puebl",
+          "routeLongName": "L43 La Manga-Cartagena",
+          "headsign": "Cartagena",
+          "directionId": "0",
+          "tripId": "000003900002202700001201",
+          "serviceId": "000003900002202700001201"
+        },
+        {
+          "time": "09:36",
+          "rawTime": "09:36:00",
+          "stopId": "0000757000000001",
+          "stopName": "Caravaning Camping",
+          "routeShortName": "ALSA - L43v Puebl",
+          "routeLongName": "L43 La Manga-Cartagena",
+          "headsign": "Cartagena",
+          "directionId": "0",
+          "tripId": "000003900002202700001202",
+          "serviceId": "000003900002202700001202"
+        },
+        {
+          "time": "11:37",
+          "rawTime": "11:37:00",
+          "stopId": "0000757000000001",
+          "stopName": "Caravaning Camping",
+          "routeShortName": "ALSA - L43v Puebl",
+          "routeLongName": "L43 La Manga-Cartagena",
+          "headsign": "Cartagena",
+          "directionId": "0",
+          "tripId": "000003900002202700001203",
+          "serviceId": "000003900002202700001203"
+        },
+        {
+          "time": "13:42",
+          "rawTime": "13:42:00",
+          "stopId": "0000757000000001",
+          "stopName": "Caravaning Camping",
+          "routeShortName": "ALSA - L43v Puebl",
+          "routeLongName": "L43 La Manga-Cartagena",
+          "headsign": "Cartagena",
+          "directionId": "0",
+          "tripId": "000003900002202700001204",
+          "serviceId": "000003900002202700001204"
+        },
+        {
+          "time": "16:06",
+          "rawTime": "16:06:00",
+          "stopId": "0000757000000001",
+          "stopName": "Caravaning Camping",
+          "routeShortName": "ALSA - L43v Puebl",
+          "routeLongName": "L43 La Manga-Cartagena",
+          "headsign": "Cartagena",
+          "directionId": "0",
+          "tripId": "000003900002202700001205",
+          "serviceId": "000003900002202700001205"
+        },
+        {
+          "time": "17:07",
+          "rawTime": "17:07:00",
+          "stopId": "0000757000000001",
+          "stopName": "Caravaning Camping",
+          "routeShortName": "ALSA - L43v Puebl",
+          "routeLongName": "L43 La Manga-Cartagena",
+          "headsign": "Cartagena",
+          "directionId": "0",
+          "tripId": "000003900002202700001206",
+          "serviceId": "000003900002202700001206"
+        },
+        {
+          "time": "18:42",
+          "rawTime": "18:42:00",
+          "stopId": "0000757000000001",
+          "stopName": "Caravaning Camping",
+          "routeShortName": "ALSA - L43v Puebl",
+          "routeLongName": "L43 La Manga-Cartagena",
+          "headsign": "Cartagena",
+          "directionId": "0",
+          "tripId": "000003900002202700001207",
+          "serviceId": "000003900002202700001207"
+        },
+        {
+          "time": "19:37",
+          "rawTime": "19:37:00",
+          "stopId": "0000757000000001",
+          "stopName": "Caravaning Camping",
+          "routeShortName": "ALSA - L43v Puebl",
+          "routeLongName": "L43 La Manga-Cartagena",
+          "headsign": "Cartagena",
+          "directionId": "0",
+          "tripId": "000003900002202700001208",
+          "serviceId": "000003900002202700001208"
+        },
+        {
+          "time": "21:06",
+          "rawTime": "21:06:00",
+          "stopId": "0000757000000001",
+          "stopName": "Caravaning Camping",
+          "routeShortName": "ALSA - L43v Puebl",
+          "routeLongName": "L43 La Manga-Cartagena",
+          "headsign": "Cartagena",
+          "directionId": "0",
+          "tripId": "000003900002202700001209",
+          "serviceId": "000003900002202700001209"
         }
       ]
     }
