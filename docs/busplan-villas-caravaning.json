@@ -1,7 +1,7 @@
 {
   "schema": "villas-caravaning-busplan",
   "version": 1,
-  "generatedAt": "2026-09-19T10:48:36.682826+02:00",
+  "generatedAt": "2026-09-20T11:17:34.827834+02:00",
   "timezone": "Europe/Madrid",
   "validForDays": 14,
   "source": {
@@ -51,144 +51,6 @@
     }
   ],
   "days": [
-    {
-      "date": "2026-09-19",
-      "weekday": "Saturday",
-      "departures": [
-        {
-          "time": "07:42",
-          "rawTime": "07:42:00",
-          "stopId": "0000757000000001",
-          "stopName": "Caravaning Camping",
-          "routeShortName": "ALSA - L43v Puebl",
-          "routeLongName": "L43 La Manga-Cartagena",
-          "headsign": "Cartagena",
-          "directionId": "0",
-          "tripId": "000003900002202700001101",
-          "serviceId": "000003900002202700001101"
-        },
-        {
-          "time": "09:35",
-          "rawTime": "09:35:00",
-          "stopId": "0002243300000001",
-          "stopName": "Camping Caravanning",
-          "routeShortName": "ALSA - R-6 Ida",
-          "routeLongName": "S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos",
-          "headsign": "Cabo de Palos",
-          "directionId": "0",
-          "tripId": "000003900002204800000106",
-          "serviceId": "000003900002204800000106"
-        },
-        {
-          "time": "09:36",
-          "rawTime": "09:36:00",
-          "stopId": "0000757000000001",
-          "stopName": "Caravaning Camping",
-          "routeShortName": "ALSA - L43v Puebl",
-          "routeLongName": "L43 La Manga-Cartagena",
-          "headsign": "Cartagena",
-          "directionId": "0",
-          "tripId": "000003900002202700001102",
-          "serviceId": "000003900002202700001102"
-        },
-        {
-          "time": "11:37",
-          "rawTime": "11:37:00",
-          "stopId": "0000757000000001",
-          "stopName": "Caravaning Camping",
-          "routeShortName": "ALSA - L43v Puebl",
-          "routeLongName": "L43 La Manga-Cartagena",
-          "headsign": "Cartagena",
-          "directionId": "0",
-          "tripId": "000003900002202700001103",
-          "serviceId": "000003900002202700001103"
-        },
-        {
-          "time": "13:42",
-          "rawTime": "13:42:00",
-          "stopId": "0000757000000001",
-          "stopName": "Caravaning Camping",
-          "routeShortName": "ALSA - L43v Puebl",
-          "routeLongName": "L43 La Manga-Cartagena",
-          "headsign": "Cartagena",
-          "directionId": "0",
-          "tripId": "000003900002202700001104",
-          "serviceId": "000003900002202700001104"
-        },
-        {
-          "time": "14:10",
-          "rawTime": "14:10:00",
-          "stopId": "0002243300000001",
-          "stopName": "Camping Caravanning",
-          "routeShortName": "ALSA - R-6 Vta",
-          "routeLongName": "Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar",
-          "headsign": "E autobuses S.Pedro del Pinat",
-          "directionId": "1",
-          "tripId": "000003900002204900000106",
-          "serviceId": "000003900002204900000106"
-        },
-        {
-          "time": "16:06",
-          "rawTime": "16:06:00",
-          "stopId": "0000757000000001",
-          "stopName": "Caravaning Camping",
-          "routeShortName": "ALSA - L43v Puebl",
-          "routeLongName": "L43 La Manga-Cartagena",
-          "headsign": "Cartagena",
-          "directionId": "0",
-          "tripId": "000003900002202700001105",
-          "serviceId": "000003900002202700001105"
-        },
-        {
-          "time": "16:35",
-          "rawTime": "16:35:00",
-          "stopId": "0002243300000001",
-          "stopName": "Camping Caravanning",
-          "routeShortName": "ALSA - R-6 Ida",
-          "routeLongName": "S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos",
-          "headsign": "Cabo de Palos",
-          "directionId": "0",
-          "tripId": "000003900002204800000107",
-          "serviceId": "000003900002204800000107"
-        },
-        {
-          "time": "18:42",
-          "rawTime": "18:42:00",
-          "stopId": "0000757000000001",
-          "stopName": "Caravaning Camping",
-          "routeShortName": "ALSA - L43v Puebl",
-          "routeLongName": "L43 La Manga-Cartagena",
-          "headsign": "Cartagena",
-          "directionId": "0",
-          "tripId": "000003900002202700001106",
-          "serviceId": "000003900002202700001106"
-        },
-        {
-          "time": "19:40",
-          "rawTime": "19:40:00",
-          "stopId": "0002243300000001",
-          "stopName": "Camping Caravanning",
-          "routeShortName": "ALSA - R-6 Vta",
-          "routeLongName": "Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar",
-          "headsign": "E autobuses S.Pedro del Pinat",
-          "directionId": "1",
-          "tripId": "000003900002204900000107",
-          "serviceId": "000003900002204900000107"
-        },
-        {
-          "time": "21:06",
-          "rawTime": "21:06:00",
-          "stopId": "0000757000000001",
-          "stopName": "Caravaning Camping",
-          "routeShortName": "ALSA - L43v Puebl",
-          "routeLongName": "L43 La Manga-Cartagena",
-          "headsign": "Cartagena",
-          "directionId": "0",
-          "tripId": "000003900002202700001107",
-          "serviceId": "000003900002202700001107"
-        }
-      ]
-    },
     {
       "date": "2026-09-20",
       "weekday": "Sunday",
@@ -2964,6 +2826,144 @@
           "directionId": "0",
           "tripId": "000003900002202700001012",
           "serviceId": "000003900002202700001012"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-03",
+      "weekday": "Saturday",
+      "departures": [
+        {
+          "time": "07:42",
+          "rawTime": "07:42:00",
+          "stopId": "0000757000000001",
+          "stopName": "Caravaning Camping",
+          "routeShortName": "ALSA - L43v Puebl",
+          "routeLongName": "L43 La Manga-Cartagena",
+          "headsign": "Cartagena",
+          "directionId": "0",
+          "tripId": "000003900002202700001101",
+          "serviceId": "000003900002202700001101"
+        },
+        {
+          "time": "09:35",
+          "rawTime": "09:35:00",
+          "stopId": "0002243300000001",
+          "stopName": "Camping Caravanning",
+          "routeShortName": "ALSA - R-6 Ida",
+          "routeLongName": "S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos",
+          "headsign": "Cabo de Palos",
+          "directionId": "0",
+          "tripId": "000003900002204800000106",
+          "serviceId": "000003900002204800000106"
+        },
+        {
+          "time": "09:36",
+          "rawTime": "09:36:00",
+          "stopId": "0000757000000001",
+          "stopName": "Caravaning Camping",
+          "routeShortName": "ALSA - L43v Puebl",
+          "routeLongName": "L43 La Manga-Cartagena",
+          "headsign": "Cartagena",
+          "directionId": "0",
+          "tripId": "000003900002202700001102",
+          "serviceId": "000003900002202700001102"
+        },
+        {
+          "time": "11:37",
+          "rawTime": "11:37:00",
+          "stopId": "0000757000000001",
+          "stopName": "Caravaning Camping",
+          "routeShortName": "ALSA - L43v Puebl",
+          "routeLongName": "L43 La Manga-Cartagena",
+          "headsign": "Cartagena",
+          "directionId": "0",
+          "tripId": "000003900002202700001103",
+          "serviceId": "000003900002202700001103"
+        },
+        {
+          "time": "13:42",
+          "rawTime": "13:42:00",
+          "stopId": "0000757000000001",
+          "stopName": "Caravaning Camping",
+          "routeShortName": "ALSA - L43v Puebl",
+          "routeLongName": "L43 La Manga-Cartagena",
+          "headsign": "Cartagena",
+          "directionId": "0",
+          "tripId": "000003900002202700001104",
+          "serviceId": "000003900002202700001104"
+        },
+        {
+          "time": "14:10",
+          "rawTime": "14:10:00",
+          "stopId": "0002243300000001",
+          "stopName": "Camping Caravanning",
+          "routeShortName": "ALSA - R-6 Vta",
+          "routeLongName": "Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar",
+          "headsign": "E autobuses S.Pedro del Pinat",
+          "directionId": "1",
+          "tripId": "000003900002204900000106",
+          "serviceId": "000003900002204900000106"
+        },
+        {
+          "time": "16:06",
+          "rawTime": "16:06:00",
+          "stopId": "0000757000000001",
+          "stopName": "Caravaning Camping",
+          "routeShortName": "ALSA - L43v Puebl",
+          "routeLongName": "L43 La Manga-Cartagena",
+          "headsign": "Cartagena",
+          "directionId": "0",
+          "tripId": "000003900002202700001105",
+          "serviceId": "000003900002202700001105"
+        },
+        {
+          "time": "16:35",
+          "rawTime": "16:35:00",
+          "stopId": "0002243300000001",
+          "stopName": "Camping Caravanning",
+          "routeShortName": "ALSA - R-6 Ida",
+          "routeLongName": "S. Pedro Pinatar-San Javier-S. Pedro Pinatar-Cabo De Palos",
+          "headsign": "Cabo de Palos",
+          "directionId": "0",
+          "tripId": "000003900002204800000107",
+          "serviceId": "000003900002204800000107"
+        },
+        {
+          "time": "18:42",
+          "rawTime": "18:42:00",
+          "stopId": "0000757000000001",
+          "stopName": "Caravaning Camping",
+          "routeShortName": "ALSA - L43v Puebl",
+          "routeLongName": "L43 La Manga-Cartagena",
+          "headsign": "Cartagena",
+          "directionId": "0",
+          "tripId": "000003900002202700001106",
+          "serviceId": "000003900002202700001106"
+        },
+        {
+          "time": "19:40",
+          "rawTime": "19:40:00",
+          "stopId": "0002243300000001",
+          "stopName": "Camping Caravanning",
+          "routeShortName": "ALSA - R-6 Vta",
+          "routeLongName": "Cabo De Palos-S. De La Ribera-S. Javier-S. Pedro Del Pinatar",
+          "headsign": "E autobuses S.Pedro del Pinat",
+          "directionId": "1",
+          "tripId": "000003900002204900000107",
+          "serviceId": "000003900002204900000107"
+        },
+        {
+          "time": "21:06",
+          "rawTime": "21:06:00",
+          "stopId": "0000757000000001",
+          "stopName": "Caravaning Camping",
+          "routeShortName": "ALSA - L43v Puebl",
+          "routeLongName": "L43 La Manga-Cartagena",
+          "headsign": "Cartagena",
+          "directionId": "0",
+          "tripId": "000003900002202700001107",
+          "serviceId": "000003900002202700001107"
         }
       ]
     }
